@@ -27,9 +27,12 @@
       {/if}
       
       <button type="submit">Log in</button>
-      
-      <p>If you don't have an account please</p>
-      <a href="/register">register</a>
+      <div class="register-text">
+        <p>
+          If you don't have an account please
+          <a href="/register">register</a>
+        </p>
+      </div>
     </form>
   </section>
     
@@ -47,19 +50,37 @@
     }
 
     a {
-      text-decoration: none;
+      text-decoration: underline;
       color: black;
     }
+
+    a:hover {
+      color:rgb(59, 67, 123)    }
 
     input {
         margin: 5px;
         padding: 10px;
+        border: 2px solid rgb(69, 69, 69);
+        border-radius: 3px;
+    }
+
+    input:focus {
+      border: 2px solid rgb(96, 110, 201);
     }
 
     button {
-        width: 70px;
+        width: 100px;
         height: 40px;
-        margin: 15px;
-        font-weight: bold;
+        margin: 25px;
+        font-size: 15px;
+        background: rgb(96, 110, 201);
+        color: white;
+        border: none;
+        border-radius: 10px;
     }
+
+    .register-text {
+      padding: 25px;
+      padding-top: 15px;
+}
 </style>

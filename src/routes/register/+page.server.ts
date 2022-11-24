@@ -9,6 +9,13 @@ enum Roles {
     USER = 'USER',
 }
 
+export const load: PageServerLoad = async ({ locals }) => {
+  // redirect user if logged in
+  if (locals.user) {
+    throw redirect(302, '/')
+  }
+}
+
 const register: Action = async ({ request }) => {
     const data = await request.formData()
     const username = data.get('username')
