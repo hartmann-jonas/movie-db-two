@@ -7,13 +7,11 @@
 	import MovieCard from '../../../components/MovieCard.svelte';
 	//Import the data for the searched Movies
 	export let data;
-	//Import the searched Title to show as text 
-	//export let ;									//NEEDS A FIX
 </script>
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
 <div class="title">
-	<h3>Results for your search</h3>			<!--Should be the searched titles name-->
-	<a href="/">⇦ Back</a>						<!--Here should be a button instead-->
+	<h3>Results for your search</h3>
+	<a href="/">Back</a>
 </div>
 	
 	<div class="searched-movies">
@@ -31,7 +29,6 @@
 		color: black;
 		font-size: 1.1rem;
 		font-weight: bold;
-		padding-right: 6%;
 	}
 
 	.title a, .title a::after {
