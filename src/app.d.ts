@@ -4,6 +4,7 @@
 declare namespace App {
   interface Locals {
     user: {
+      id: sting
       name: string
       role: string
     }

@@ -14,6 +14,6 @@ export const actions: Actions = {
     // Check if ustername already exist etc.
     cookies.delete('session');
     console.log(cookies.get("session"))
-    throw redirect(302, "/login");
+    throw redirect(302, "/");
   },
 }

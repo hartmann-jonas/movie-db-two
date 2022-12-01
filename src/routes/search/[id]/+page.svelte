@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	//Import fly animation from svelte
 	import { fly } from 'svelte/transition';
 	//Import the redirect from svelte
@@ -6,7 +6,9 @@
 	//Import the Card System component
 	import MovieCard from '../../../components/MovieCard.svelte';
 	//Import the data for the searched Movies
-	export let data;
+	import type { PageServerData } from './$types';
+
+	export let data: PageServerData;
 </script>
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
 <div class="title">
@@ -14,12 +16,14 @@
 	<a href="/">Back</a>
 </div>
 	
+{#if data.props}
 	<div class="searched-movies">
 		<!--Loop over the movies and render the card-->
 		{#each data.props.searchedMovie as movie}
 		<MovieCard {movie} />
 		{/each}
 	</div>
+{/if}
 </section>
 	
 <style>

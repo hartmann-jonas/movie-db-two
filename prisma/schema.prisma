@@ -9,6 +9,7 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
 //Create table User
 model User {
   id            String @id @default(uuid())
@@ -19,8 +20,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  role   Roles @relation(fields: [roleId], references: [id])
-  roleId Int
+  role      Roles       @relation(fields: [roleId], references: [id])
+  roleId    Int
+  Favourite Favourite[]
 }
 
 //Create table Roles
@@ -28,4 +30,18 @@ model Roles {
   id   Int    @id @default(autoincrement())
   name String @unique
   User User[]
+}
+
+//Create table Favourites
+model Favourite {
+  id      Int    @id @default(autoincrement())
+  movie   Movie  @relation(fields: [movieId], references: [id])
+  movieId Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+model Movie {
+  id        Int        @id @default(autoincrement())
+  Favourite Favourite[]
 }

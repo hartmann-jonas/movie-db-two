@@ -2,35 +2,45 @@
 	import { page } from '$app/stores'
 </script>
 
+{#if !$page.data.user}
 
-<nav data-sveltekit-prefetch>
+<nav class="unlogged-nav" data-sveltekit-prefetch>
 	<!--HEADER VERSION LOGGED OUT-->
-	{#if !$page.data.user}
 		<a class="title" href="/">Movie Database</a>
 		<a class="login" href="/login">Login</a>
-	{/if}
+</nav>
+{/if}
+{#if $page.data.user}
+<nav class="logged-nav" data-sveltekit-prefetch>
 	<!--HEADER VERSION LOGGED IN-->
-	{#if $page.data.user}
+		<a class="profile" href="/profile">Profile</a>
 		<a class="title" href="/">Movie Database</a>	
 		<form action="/logout" method="POST">
 			<button class="logout" type="submit">Logout</button>
 		</form>
-	{/if}
 </nav>
-
+{/if}
 
 
 <style>
-	nav {
+	.unlogged-nav {
 		display: flex;
 		min-height: 10vh;
 		align-items: center;
 		justify-content: center;
 	}
+
+	.logged-nav {
+		display: flex;
+		min-height: 10vh;
+		align-items: center;
+		justify-content: space-between;
+	}
+
 	/*Positioning of the right items in the navbar*/
-	.login, .logout {
+	.login {
 		position: absolute;
-		right: 12%	;
+		right: 10%	;
 	}
 
 	button {
@@ -38,7 +48,7 @@
 		font-weight: bold;
 		font-family: 'Poppins';
 		padding: 2.5px;
-		background: red;
+		background: none;
 		border: none;
 	}
 

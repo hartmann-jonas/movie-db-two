@@ -5,8 +5,7 @@ import type { Action, Actions, PageServerLoad } from './$types'
 import { database } from '$lib/database'
 
 export const load: PageServerLoad = async ({ locals }) => {
-  // redirect user if logged in#
-  console.log(locals)
+  // redirect user if logged in
   if (locals.user) {
     throw redirect(302, '/')
   }
@@ -58,8 +57,9 @@ const login: Action = async ({ cookies, request }) => {
     maxAge: 60 * 60 * 24 * 30,
   })
 
+  console.log('Logging in')
   // redirect the user
-  throw redirect(302, '/')
+  throw redirect(302, '/profile')
 }
 
 export const actions: Actions = { login }
