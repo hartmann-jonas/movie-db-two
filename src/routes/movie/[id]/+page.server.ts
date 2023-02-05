@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import type { Action, Actions } from './$types';
 import { database } from '$lib/database';
-import { error } from '@sveltejs/kit'
+import { error, invalid } from '@sveltejs/kit'
 
 import 'dotenv/config'
 
@@ -31,20 +31,27 @@ export const load: PageServerLoad = async ({params}) => {
 
 //Store ${params.id} to database.favourites
 
-
-const saveMovie: Action = async ({ params, locals }) => {
-	let movieId = +params.id
-	console.log('Movie ID:'+ movieId)
-	console.log('User:' + locals.user.id)
-
-	
-
-	await database.favourite.create({
-		data: {
-			movieId: movieId,
-			userId:  locals.user.id
+export const actions: Actions = {
+	saveMovie: async ({ locals, params }) => {
+		if (locals.user.id) {
+			const movieId = Number(params.id)
+			const userId = locals.user.id
+			console.log('Movie ID:'+ movieId)
+			console.log('User:' + userId)
+			try {
+				await database.favourite.create({
+					data: {
+						movieId: movieId,
+						userId: userId
+					},
+				});
+			}
+			catch (e) {
+				console.log(e)
+				return invalid(400, {error: "saving the movie failed"})
+			}
+		} else {
+			throw error(400, "No user id found.")
 		}
-	})
+	}
 }
-
-export const actions: Actions = { saveMovie }
