@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import type { Action, Actions } from './$types';
 import { database } from '$lib/database';
-import { error, invalid } from '@sveltejs/kit'
+import { error, fail } from '@sveltejs/kit'
 
 import 'dotenv/config'
 
@@ -48,7 +48,7 @@ export const actions: Actions = {
 			}
 			catch (e) {
 				console.log(e)
-				return invalid(400, {error: "saving the movie failed"})
+				return fail(400, {error: "saving the movie failed"})
 			}
 		} else {
 			throw error(400, "No user id found.")
