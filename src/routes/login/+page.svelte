@@ -1,13 +1,32 @@
 <script lang="ts">
-    import type { ActionData } from './$types'
-  
+	  import { enhance } from '$app/forms';
+    import type { ActionData } from './$types';
+    import Icon from 'svelte-awesome';
+    import spinner from 'svelte-awesome/icons/spinner';
+
     export let form: ActionData
+
+    let signin = false
+    let scale = 3;
   </script>
   
   <section>
     <h1>Login</h1>
     
-    <form action="?/login" method="POST">
+    {#if signin}
+      <h4>Signing in</h4>
+      <br>
+      <Icon data={spinner} pulse {scale} />
+    {:else}
+      <form use:enhance={({})=>{
+      signin = true
+      return async ({result, update}) => {
+        if(result.type!="redirect") {
+          signin = false
+        }
+        update()
+      }
+    }} action="?/login" method="POST">
       <div>
         <h4>Username</h4>
         <input id="username" name="username" type="text" required />
@@ -34,6 +53,7 @@
         </p>
       </div>
     </form>
+    {/if}
   </section>
     
     
@@ -42,7 +62,7 @@
       margin: auto;
         margin-top: 90px;
         text-align: center;
-        width: 50%;
+        width: 80%;
     }
 
     section h1 {
@@ -62,6 +82,8 @@
         padding: 10px;
         border: 2px solid rgb(69, 69, 69);
         border-radius: 3px;
+        min-width: 200px;
+        max-width: 500px
     }
 
     input:focus {

@@ -30,9 +30,10 @@
 
 <style>
     section {
-        padding: 15px;
+      margin: auto;
         margin-top: 90px;
         text-align: center;
+        width: 80%;
     }
 
     section h1 {
@@ -42,12 +43,24 @@
     input {
         margin: 5px;
         padding: 10px;
+        border: 2px solid rgb(69, 69, 69);
+        border-radius: 3px;
+        min-width: 200px;
+        max-width: 500px
+    }
+
+    input:focus {
+      border: 2px solid rgb(96, 110, 201);
     }
 
     button {
-        width: 70px;
+        width: 100px;
         height: 40px;
-        margin: 15px;
-        font-weight: bold;
+        margin: 25px;
+        font-size: 15px;
+        background: rgb(96, 110, 201);
+        color: white;
+        border: none;
+        border-radius: 10px;
     }
 </style>
