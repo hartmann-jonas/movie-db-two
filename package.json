@@ -33,6 +33,7 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.6.1",
+		"@vercel/analytics": "^0.1.8",
 		"bcrypt": "^5.1.0",
 		"dotenv": "^16.0.3",
 		"prisma": "^4.10.0",
