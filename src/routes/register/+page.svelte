@@ -1,66 +1,172 @@
 <script lang="ts">
-	//Import the fly animation from svelte
 	import { fly } from 'svelte/transition';
+  import { enhance } from '$app/forms';
   import type { ActionData } from './$types'
   export let form: ActionData
+  import Icon from 'svelte-awesome';
+  import spinner from 'svelte-awesome/icons/spinner';
+
+  let register = false
+  let scale = 3;
 </script>
 
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
-  <h1>Register now</h1>
-    <form action="?/register" method="POST">
-        <div>
-          <h4>Username</h4>
-          <input id="username" name="username" type="text" required />
-        </div>
-      
-        <div>
-          <h4>Password</h4>
-          <input id="password" name="password" type="password" required />
-        </div>
-        
-        {#if form?.user}
-          <p class="error">Username is taken.</p>
-        {/if}
+  <div class="register">
+    <div class="head">
+      <h4>Sign Up</h4>
+    </div>
+    {#if register}
+      <div class="loading">
+        <h4>Signing up</h4>
+        <br>
+        <Icon data={spinner} pulse {scale} />
+      </div>
+    {:else}
+      <form use:enhance={({})=>{
+        register = true
+        return async ({result, update}) => {
+          if(result.type!="redirect") {
+            register = false
+          }
+          update()
+        }
+        }} action="?/register" method="POST">
+        <div class="fields">
+          <div>
+          <label for="username">USERNAME</label>
+            <input id="username" name="username" type="text" required />
+          </div>
+          <div>
+            <label for="password">PASSWORD</label>
+            <input id="password" name="password" type="password" required />
+          </div>
 
-        <button type="submit">Register</button>
-      </form>      
+          {#if form?.user}
+          <p class="error">Username already taken.</p>
+          {/if}
+          <button type="submit">Sign In</button>
+          <div class="text">
+            <p>
+              You have an account? <a href="/login">Sign in</a> instead.
+            </p>
+          </div>
+        </div>
+      </form>
+    {/if}
+  </div>
 </section>
-
-
-
+    
+    
 <style>
-    section {
-      margin: auto;
-        margin-top: 90px;
-        text-align: center;
-        width: 80%;
-    }
+  .register {
+    margin-top: 15vh;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: inherit;
+    box-shadow: 0 0 5px darkgray;
+    border: 1px;
+    border-radius: 1rem;
+    max-width: 28rem;
+    width: 100%;
+  }
 
-    section h1 {
-        padding-bottom: 20px;
-    }
+  .head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgb(229, 231, 235);
+  }
 
-    input {
-        margin: 5px;
-        padding: 10px;
-        border: 2px solid rgb(69, 69, 69);
-        border-radius: 3px;
-        min-width: 200px;
-        max-width: 500px
-    }
+  .loading {
+    padding: 5rem;
+    text-align: center;
+    align-items: center;
+  }
 
-    input:focus {
-      border: 2px solid rgb(96, 110, 201);
-    }
+  form {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: rgb(249 250 251);
+  }
 
-    button {
-        width: 100px;
-        height: 40px;
-        margin: 25px;
-        font-size: 15px;
-        background: rgb(96, 110, 201);
-        color: white;
-        border: none;
-        border-radius: 10px;
-    }
+  label {
+    text-transform: uppercase;
+    font-size: .75rem;
+    line-height: 1rem;
+    display: block;
+  }
+
+  input {
+    font-size: .875rem;
+    line-height: 1.25rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: .75rem;
+    padding-bottom: .75rem;
+    border-color: rgb(209, 213, 219);
+    border-width: 1px;
+    border-radius: .375rem;
+    width: 100%;
+    display: block;
+    margin-top: .25rem;
+  }
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4, 0, .2 , 1);
+    transition-duration: .15s;
+    color: white;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    background-color: black;
+    border-color: black;
+    border-width: 1px;
+    border-radius: .375rem;
+    cursor: pointer;
+    width: 100%;
+    height: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  button:hover {
+    color: black;
+    background-color: white;
+  }
+
+  .text {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    text-align: center;
+  }
+
+  .text a {
+    color: black;
+    text-decoration: inherit;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .error {
+    padding-top: 1rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: red;
+    text-align: center;
+  }
 </style>
