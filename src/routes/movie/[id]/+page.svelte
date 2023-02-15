@@ -47,13 +47,13 @@
 			<h1>{data.props.movieDetail.title}</h1>
 			{#if $page.data.user}
 				{#if !data.props.favorited}
-					<form action="?/saveMovie" method="post">
+					<form class="unsaved" action="?/saveMovie" method="post">
 						<button type="submit">save</button>
 					</form>
 				{:else}
-					<div class="saved">
-						<Icon data={check} {scale}/>
-					</div>
+					<form class="saved" action="?/unsaveMovie" method="post">
+						<button type="submit"><Icon data={check} {scale}/></button>
+					</form>
 				{/if}
 			{/if}
 		</div>
@@ -166,7 +166,7 @@
 		padding: 1rem 0rem 2rem;
 	}
 
-	.title button {
+	.unsaved button {
 		color: white;
 		background-color: black;
 		border: none;
@@ -175,19 +175,27 @@
 		height: 40px;
 	}
 
-	.saved {
+	.saved button {
 		display: flex;
+		color: goldenrod;
+		background-color: black;
+		border: none;
 		border-radius: 100%;
 		width: 40px;
 		height: 40px;
-		color: goldenrod;
-		background-color: black;
 		justify-content: center;
 		align-items: center;
 	}
 
-	.title button:hover {
+	.unsaved button:hover {
 		transition: 0.25s;
+		background-color: goldenrod;
+		cursor: pointer;
+	}
+
+	.saved button:hover {
+		transition: 0.25s;
+		color: black;
 		background-color: goldenrod;
 		cursor: pointer;
 	}

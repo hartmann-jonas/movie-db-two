@@ -56,8 +56,7 @@ export const load: PageServerLoad = async ({params,locals}) => {
 	throw error(404,"not found")
 }
 
-//Store movie as favourites
-
+//Store movie as favourite
 export const actions: Actions = {
 	saveMovie: async ({ locals, params }) => {
 		if (locals.user.id) {
@@ -81,6 +80,36 @@ export const actions: Actions = {
 								create:{
 									id:movieId
 								}
+							}
+						}
+					}
+				})
+			}
+			catch (e) {
+				console.log(e)
+				return fail(400, {error: "saving the movie failed"})
+			}
+		} else {
+			throw error(400, "No user id found.")
+		}
+	},
+
+	// Remove movie from favourites
+	unsaveMovie: async ({ locals, params }) => {
+		if (locals.user.id) {
+			const movieId = Number(params.id)
+			const userId = locals.user.id
+			console.log('Movie ID:  '+ movieId)
+			console.log('User:  ' + userId)
+			try {
+				await database.movie.update({
+					where:{
+						id:movieId
+					},
+					data:{
+						favorited_by:{
+							disconnect:{
+								id:userId
 							}
 						}
 					}
