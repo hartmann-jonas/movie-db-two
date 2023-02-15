@@ -180,7 +180,8 @@
 		border-radius: 100%;
 		width: 40px;
 		height: 40px;
-		background-color: goldenrod;
+		color: goldenrod;
+		background-color: black;
 		justify-content: center;
 		align-items: center;
 	}

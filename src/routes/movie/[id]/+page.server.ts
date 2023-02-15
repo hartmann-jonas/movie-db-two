@@ -19,7 +19,8 @@ export const load: PageServerLoad = async ({params,locals}) => {
 		const movieAvailability = await resAvailability.json();
 		if (resAvailability.ok) {
 			let favorited=undefined;
-			if (locals.user.id) {
+			console.log(locals)
+			if (locals.user) {
 				const movieId = Number(params.id)
 				const userId = locals.user.id
 				const result = await database.user.findUnique({
