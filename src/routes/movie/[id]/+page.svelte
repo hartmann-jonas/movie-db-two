@@ -3,13 +3,14 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores'
 	import Icon from 'svelte-awesome';
-  	import check from 'svelte-awesome/icons/check';
+	import check from 'svelte-awesome/icons/check';
+	import save from 'svelte-awesome/icons/save';
 
 	export let data: PageServerData;
 
 	const countries = [
-		{index: 1, name: "Germany", code:"DE"},
-		{index: 2, name: "Sweden", code:"SE"},
+		{index: 1, name: "Sweden", code:"SE"},
+		{index: 2, name: "Germany", code:"DE"},
 		{index: 3, name: "Austria", code:"AT"},
 		{index: 4, name: "Switzerland", code:"CH"},
 		{index: 5, name: "Canada", code:"CA"},
@@ -25,8 +26,7 @@
 	$: details = data.props.movieAvailability.results[selected?.code]
 
 	// scale for icons
-	let scale = 1.5;
-
+	let scale = 1.25;
 </script>
 
 <section
@@ -48,7 +48,7 @@
 			{#if $page.data.user}
 				{#if !data.props.favorited}
 					<form class="unsaved" action="?/saveMovie" method="post">
-						<button type="submit">save</button>
+						<button type="submit"><Icon data={save} {scale}/></button>
 					</form>
 				{:else}
 					<form class="saved" action="?/unsaveMovie" method="post">
@@ -167,12 +167,15 @@
 	}
 
 	.unsaved button {
+		display: flex;
 		color: white;
 		background-color: black;
 		border: none;
 		border-radius: 100%;
 		width: 40px;
 		height: 40px;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.saved button {
@@ -233,5 +236,12 @@
 		border-radius: 20%;
 		margin: 5px;
 		box-shadow: 0px 0px 5px darkgray;
+	}
+
+	select {
+		border: 0;
+		border-radius: 5px;
+		padding: 5px;
+		font-size: 14px;
 	}
 </style>

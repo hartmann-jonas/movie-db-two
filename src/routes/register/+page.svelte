@@ -64,6 +64,7 @@
     margin-right: auto;
     line-height: inherit;
     box-shadow: 0 0 5px darkgray;
+    background-color: rgb(226, 226, 203);
     border: 1px;
     border-radius: 1rem;
     max-width: 28rem;
@@ -76,17 +77,18 @@
     align-items: center;
     flex-direction: column;
     text-align: center;
+    border-radius: 1rem 1rem 0 0;
     padding-left: 4rem;
     padding-right: 4rem;
     padding-top: 2rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgb(229, 231, 235);
   }
 
   .loading {
     padding: 5rem;
     text-align: center;
     align-items: center;
+    border-radius: 0 0 1rem 1rem;
   }
 
   form {
@@ -96,11 +98,11 @@
     padding-right: 4rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    background-color: rgb(249 250 251);
   }
 
   label {
     text-transform: uppercase;
+    padding-top: .5rem;
     font-size: .75rem;
     line-height: 1rem;
     display: block;
@@ -144,7 +146,7 @@
 
   button:hover {
     color: black;
-    background-color: white;
+    background-color: rgb(250, 250, 237);
   }
 
   .text {
