@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import type { PageServerData } from './$types';
+	import { page } from '$app/stores'
+	import Icon from 'svelte-awesome';
+  	import check from 'svelte-awesome/icons/check';
 
 	export let data: PageServerData;
 
@@ -21,6 +24,8 @@
 
 	$: details = data.props.movieAvailability.results[selected?.code]
 
+	// scale for icons
+	let scale = 1.5;
 
 </script>
 
@@ -40,9 +45,17 @@
 	<div class="txt-container">
 		<div class="title">
 			<h1>{data.props.movieDetail.title}</h1>
-			<form action="?/saveMovie" method="post">
-				<button type="submit">save</button>
-			</form>
+			{#if $page.data.user}
+				{#if !data.props.favorited}
+					<form action="?/saveMovie" method="post">
+						<button type="submit">save</button>
+					</form>
+				{:else}
+					<div class="saved">
+						<Icon data={check} {scale}/>
+					</div>
+				{/if}
+			{/if}
 		</div>
 		<p class="overview">{data.props.movieDetail.overview}</p>
 		<div class="movie-txt">
@@ -160,6 +173,16 @@
 		border-radius: 100%;
 		width: 40px;
 		height: 40px;
+	}
+
+	.saved {
+		display: flex;
+		border-radius: 100%;
+		width: 40px;
+		height: 40px;
+		background-color: goldenrod;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.title button:hover {
