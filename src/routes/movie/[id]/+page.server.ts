@@ -21,6 +21,15 @@ export const load: PageServerLoad = async ({params,locals}) => {
 			let favorited=undefined;
 			let liked=undefined;
 			let likes=undefined;
+			const movieResult = await database.movie.findUnique({
+				where:{
+					id:movieId
+				},
+				include:{
+					likes
+				}
+			})
+			likes=movieResult.likes.length
 			console.log(locals)
 			if (locals.user) {
 				const movieId = Number(params.id)
@@ -48,15 +57,6 @@ export const load: PageServerLoad = async ({params,locals}) => {
 				if(result){
 					favorited=result.favorite_movies.length>0
 					liked=result.liked_movies.length>0
-					const movieResult = await database.movie.findUnique({
-						where:{
-							id:movieId
-						},
-						include:{
-							likes
-						}
-					})
-					likes=movieResult.likes.length
 				}
 			}
 
