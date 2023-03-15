@@ -61,6 +61,12 @@
     
     
 <style>
+  :root {
+    --big-font: 1rem;
+    --medium-font: .875rem;
+    --small-font: .75rem;
+  }
+
   .signin {
     margin-top: 15vh;
     margin-left: auto;
@@ -106,13 +112,13 @@
   label {
     text-transform: uppercase;
     padding-top: .5rem;
-    font-size: .75rem;
+    font-size: var(--small-font);
     line-height: 1rem;
     display: block;
   }
 
   input {
-    font-size: .875rem;
+    font-size: var(--big-font);
     line-height: 1.25rem;
     padding-top: .5rem;
     padding-bottom: .5rem;
@@ -134,7 +140,7 @@
     transition-timing-function: cubic-bezier(.4, 0, .2 , 1);
     transition-duration: .15s;
     color: white;
-    font-size: .875rem;
+    font-size: var(--big-font);
     line-height: 1.25rem;
     background-color: black;
     border-color: black;
@@ -155,7 +161,7 @@
   .text {
     margin-top: 1rem;
     margin-bottom: 1rem;
-    font-size: .875rem;
+    font-size: var(--medium-font);
     line-height: 1.25rem;
     text-align: center;
   }
@@ -169,7 +175,7 @@
 
   .error {
     padding-top: 1rem;
-    font-size: .875rem;
+    font-size: var(--medium-font);
     line-height: 1.25rem;
     color: red;
     text-align: center;

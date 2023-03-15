@@ -28,10 +28,7 @@
 		border-radius: 1rem;
 		margin-bottom: 1rem;
 		display: block;
-  		max-width:100%;
-  		max-height:100%;
-  		width: auto;
-  		height: auto;
+		width: 100%;
 	}
 
 	h2 {

@@ -3,8 +3,11 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores'
 	import Icon from 'svelte-awesome';
-	import check from 'svelte-awesome/icons/check';
-	import save from 'svelte-awesome/icons/save';
+	import bookmark from 'svelte-awesome/icons/bookmark';
+	import bookmarkO from 'svelte-awesome/icons/bookmarkO';
+	import heart from 'svelte-awesome/icons/heart';
+	import heartO from 'svelte-awesome/icons/heartO';
+	import { enhance } from '$app/forms';
 
 	export let data: PageServerData;
 
@@ -24,6 +27,7 @@
 	}
 
 	$: details = data.props.movieAvailability.results[selected?.code]
+	let limitedVideos = data.props.movieDetail.videos.results.slice(0, 5)
 
 	// scale for icons
 	let scale = 1.25;
@@ -42,20 +46,38 @@
 		/>
 		{/if}
 	</div>
-	<div class="txt-container">
+	<div id="movie-details" class="txt-container">
 		<div class="title">
 			<h1>{data.props.movieDetail.title}</h1>
-			{#if $page.data.user}
-				{#if !data.props.favorited}
-					<form class="unsaved" action="?/saveMovie" method="post">
-						<button type="submit"><Icon data={save} {scale}/></button>
-					</form>
+			<div class="user-interactions">
+				{#if data.props.likes = 1}
+					<p class="text-small">{data.props.likes} like</p>
 				{:else}
-					<form class="saved" action="?/unsaveMovie" method="post">
-						<button type="submit"><Icon data={check} {scale}/></button>
-					</form>
+					<p class="text-small">{data.props.likes} like</p>
 				{/if}
-			{/if}
+				{#if $page.data.user}
+				<div class="interactions">
+					{#if !data.props.liked}
+					<form use:enhance class="unliked" action="?/likeMovie" method="post">
+						<button type="submit"><Icon data={heartO} {scale}/></button>
+					</form>
+					{:else}
+					<form use:enhance class="liked" action="?/unlikeMovie" method="post">
+						<button type="submit"><Icon data={heart} {scale}/></button>
+					</form>
+					{/if}
+					{#if !data.props.favorited}
+					<form use:enhance class="unsaved" action="?/saveMovie" method="post">
+						<button type="submit"><Icon data={bookmarkO} {scale}/></button>
+					</form>
+					{:else}
+					<form use:enhance class="saved" action="?/unsaveMovie" method="post">
+						<button type="submit"><Icon data={bookmark} {scale}/></button>
+					</form>
+					{/if}
+				</div>
+				{/if}
+			</div>
 		</div>
 		<p class="overview">{data.props.movieDetail.overview}</p>
 		<div class="movie-txt">
@@ -90,7 +112,7 @@
 			{#if typeof data.props.movieDetail.production_companies[0] !== 'undefined'}
 			<hr>
 			<div class="production-infos">
-				<h3>Production Infos</h3> <br />
+				<h4 class="title-text">Production Infos</h4> <br />
 				<span>Production Company:</span>
 				{#if typeof data.props.movieDetail.production_companies[0].logo_path == 'string'}
 				<br />
@@ -103,9 +125,9 @@
 			</div>
 			{/if}
 		</div>
-		<div class="providers">
-			<div class="title">
-				<h3>Watch at:</h3>
+		<div id="movie-providers" class="providers">
+			<div class="selText">
+				<h4 class="title-text">Watch at:</h4>
 				<form class="selCountry" on:change={changeCountry}>
 					<label for="country">select country:</label>
 					<select name="country" id="country" bind:value={selected}>
@@ -119,44 +141,71 @@
 			</div>
 			{#if details}
 				{#if details.flatrate}
-					<p>Flatrate</p>
+				<p>Flatrate</p>
 					{#each details.flatrate as test}
-						<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
+					<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
 					{/each}
 				{/if}
 				{#if details.buy}
-					<p>Buy</p>
+				<p>Buy</p>
 					{#each details.buy as test}
-						<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
+					<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
 					{/each}
 				{/if}
 				{#if details.rent}
-					<p>Rent</p>
+				<p>Rent</p>
 					{#each details.rent as test}
-						<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
+					<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
 					{/each}
 				{/if}
 				{#if details.free}
-					<p>Free</p>
+				<p>Free</p>
 					{#each details.free as test}
-						<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
+					<img class="provider-logo" src="https://image.tmdb.org/t/p/w500{test.logo_path}" alt="logo">
 					{/each}
 				{/if}
-			{/if}
-			{#if !details}
-				<p>Not available in {selected.name}</p>
+			{:else}
+			<p>Not available in {selected.name}</p>
 			{/if}
 		</div>
-	</div>
+		<hr />
+		<div class="movie-videos">
+			<h4 class="title-text">Related Videos:</h4>
+			<div class="videos">
+				{#each limitedVideos as video}
+				<div class="video-card m-3">
+					{#if video.site == "YouTube"}
+					<iframe class="video-thumbnail" title={video.type} src="https://youtube.com/embed/{video.key}" frameborder="0"></iframe>
+					{:else if video.site == "Vimeo"}
+					<p>{video.type}</p>
+					{/if}
+					<div class="video-text">
+						<p>{video.name}</p>
+					</div>
+				</div>
+				{/each}
+			</div>
+		</div>
 </section>
 
 <style>
+	.img-container img{
+		width: 100%;
+		border-radius: .5rem;
+	}
+
+	.text-small {
+		font-size: 1rem;
+	}
+
 	p {
 		padding: 1rem 0rem;
 	}
 
 	hr {
 		margin: 25px 0px 20px;
+		color: black;
+		border: .5px solid black;
 	}
 
 	.title {
@@ -166,12 +215,84 @@
 		padding: 1rem 0rem 2rem;
 	}
 
+	.user-interactions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.user-interactions p {
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 570px) {
+		.user-interactions {
+			flex-direction: column-reverse;
+			gap: 1px;
+		}
+
+		.user-interactions p {
+			padding: 0;
+		}
+
+		.text-small {
+			font-size: .7rem;
+		}
+	}
+
+	.interactions {
+		display: flex;
+	}
+
+	.unliked button {
+		display: flex;
+		color: white;
+		background-color: black;
+		border: none;
+		border-right: solid rgb(30, 30, 30) 1px;
+		border-top-left-radius: 50%;
+		border-bottom-left-radius: 50%;
+		width: 40px;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.liked button{
+		display: flex;
+		color: red;
+		background-color: black;
+		border: none;
+		border-right: solid rgb(30, 30, 30) 1px;
+		border-top-left-radius: 50%;
+		border-bottom-left-radius: 50%;
+		width: 40px;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.unliked button:hover {
+		transition: 0.25s;
+		background-color: red;
+		cursor: pointer;
+	}
+
+	.liked button:hover {
+		transition: 0.25s;
+		color: black;
+		background-color: red;
+		cursor: pointer;
+	}
+
 	.unsaved button {
 		display: flex;
 		color: white;
 		background-color: black;
 		border: none;
-		border-radius: 100%;
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;
 		width: 40px;
 		height: 40px;
 		justify-content: center;
@@ -180,10 +301,11 @@
 
 	.saved button {
 		display: flex;
-		color: goldenrod;
+		color: gold;
 		background-color: black;
 		border: none;
-		border-radius: 100%;
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;
 		width: 40px;
 		height: 40px;
 		justify-content: center;
@@ -203,28 +325,30 @@
 		cursor: pointer;
 	}
 
-	.img-container {
-		width: 100%;
-	}
-
-	img {
-		width: 100%;
-		border-radius: 1rem;
-	}
-
 	.movie-details {
-		margin: 2rem 20%;
+		margin: 2rem auto;
+		max-width: 80%;
+	}
+
+	@media (max-width: 400px) {
+		.movie-details {
+			margin: 1.5rem auto;
+		}
 	}
 
 	span {
-		font-weight: bold;
+		font-weight: 600;
 	}
 
 	.company-logo {
 		width: 20%;
-		min-width: 20%;
-		margin-left: 30px;
-		padding: 15px;
+		min-width: 20vh;
+		margin-left: 2rem;
+		padding: 1rem;
+	}
+
+	.providers {
+		margin-top: 3rem;
 	}
 
 	.providers p {
@@ -238,10 +362,90 @@
 		box-shadow: 0px 0px 5px darkgray;
 	}
 
+	.selText {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	@media (max-width: 420px) {
+		.selText {
+			width: 100%;
+			display: block;
+			align-items: center;
+			overflow: hidden;
+
+		}
+	}
+
 	select {
 		border: 0;
 		border-radius: 5px;
 		padding: 5px;
 		font-size: 14px;
+		background-color: rgb(225, 225, 204);
+	}
+
+	.movie-videos {
+		margin-top: 2.5rem;
+		margin-bottom: 2.5rem;
+	}
+
+	.title-text {
+    	font-size: 1.125rem;
+    	line-height: 1.75rem;
+		font-weight: 700;
+	}
+
+	.videos {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		-ms-overflow-style: -ms-autohiding-scrollbar; 
+	}
+
+	.video-card {
+		margin: 0.75rem;
+	}
+	
+	.video-thumbnail {
+		width: 25rem;
+		aspect-ratio: 16 / 9;
+		border-top-left-radius: .5rem;
+		border-top-right-radius: .5rem;
+		border-bottom-left-radius: .5rem;
+		border-bottom-right-radius: .5rem;
+		box-shadow: 0px 0px 5px darkgray;
+	}
+
+	.video-text {
+		display: none;
+	}
+
+	@media (max-width: 420px) {
+		.video-card {
+			background-color: rgb(226, 226, 203);
+			border-radius: .5rem;
+			box-shadow: 0px 0px 5px darkgray;
+		}
+		
+		.video-thumbnail {
+			width: 15rem;
+			border-bottom-left-radius: 0rem;
+			border-bottom-right-radius: 0rem;
+		}
+
+		.video-text {
+			display: contents;
+			margin: .5rem;
+		}
+
+		.video-text p {
+			overflow: hidden;
+			max-height: 4rem;
+			line-height: 1.5rem;
+		}
 	}
 </style>

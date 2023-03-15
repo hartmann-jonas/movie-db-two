@@ -1,4 +1,5 @@
 <script lang="ts">
+    import MovieGrid from '../../components/MovieGrid.svelte';
 	import { page } from '$app/stores'
     import type { PageServerData } from './$types';
     //Import the Card System component
@@ -13,15 +14,13 @@
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
 
 <h1>
-    Hello, {$page.data.user.name}
+    Hi, {$page.data.user.name}!
 </h1>
 
 <p>Your saved movies:</p>
 {#if data.props.favouriteMovies.length > 0}
 <section class="saved-movies">
-    {#each data.props?.favouriteMovies as movie}
-        <MovieCard {movie}/>
-    {/each}
+    <MovieGrid movies={data.props?.favouriteMovies}/>
 </section>
 {:else}
 <section class="no-saved-movies">
@@ -33,14 +32,6 @@
 </section>
 
 <style>
-    .saved-movies {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	grid-column-gap: 1rem;
-	grid-row-gap: 2rem;
-	height: 20vh;
-    max-height: 20vh;
-    }
 
     .no-saved-movies {
         margin: auto;
