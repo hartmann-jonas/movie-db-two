@@ -29,6 +29,7 @@
 		margin-bottom: 1rem;
 		display: block;
 		width: 100%;
+		max-width: 266.233px;
 	}
 
 	h2 {

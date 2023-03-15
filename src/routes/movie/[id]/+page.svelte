@@ -20,6 +20,8 @@
 		{index: 6, name: "USA", code:"US"}
 	];
 
+	let likes = data.props.likes
+
 	let selected:any = countries[0];
 	
 	function changeCountry() {
@@ -50,10 +52,10 @@
 		<div class="title">
 			<h1>{data.props.movieDetail.title}</h1>
 			<div class="user-interactions">
-				{#if data.props.likes = 1}
-					<p class="text-small">{data.props.likes} like</p>
+				{#if likes==1}
+					<p class="text-small">{likes} like</p>
 				{:else}
-					<p class="text-small">{data.props.likes} like</p>
+					<p class="text-small">{likes} likes</p>
 				{/if}
 				{#if $page.data.user}
 				<div class="interactions">
@@ -76,6 +78,8 @@
 					</form>
 					{/if}
 				</div>
+				{:else}
+					<a class="interactions-alternative" href="/login">Login to like</a>
 				{/if}
 			</div>
 		</div>
@@ -213,6 +217,19 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem 0rem 2rem;
+	}
+
+	.interactions-alternative {
+		background-color: black;
+		color: white;
+		text-decoration: none;
+		padding: 5px;
+		border-radius: .4rem;
+	}
+
+	.interactions-alternative:hover {
+		background-color: rgb(226, 226, 203);
+		color: black;
 	}
 
 	.user-interactions {
