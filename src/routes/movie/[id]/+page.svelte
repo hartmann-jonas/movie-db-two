@@ -254,7 +254,13 @@
 		}
 
 		.text-small {
-			font-size: .7rem;
+			font-size: .8rem;
+		}
+
+		.interactions-alternative {
+			font-size: .9rem;
+			overflow: hidden;
+			white-space: nowrap;
 		}
 	}
 
