@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({params,locals}) => {
 	let likes = 0;
 	//Fetch the details for the movie by ID
 	const response = await fetch(
-		`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}&append_to_response=videos,keywords`
+		`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}&append_to_response=videos,keywords,recommendations`
 	);
 	const movieDetail = await response.json();
 	if (response.ok) {
@@ -34,10 +34,10 @@ export const load: PageServerLoad = async ({params,locals}) => {
 			// if movie exists / doesnt exist
 			if(movieResult) {
 				likes=movieResult.likes.length
+				console.log(likes + " likes")
 			} else {
 				console.log("No likes")
 			}
-			console.log(locals)
 			// if a user is logged in - check if he has liked / saved the movie
 			if (locals.user) {
 				const userId = locals.user.id
@@ -60,22 +60,11 @@ export const load: PageServerLoad = async ({params,locals}) => {
 						}
 					}
 				})
-				console.log(result)
 				if(result){
 					favorited=result.favorite_movies.length>0
 					liked=result.liked_movies.length>0
 				}
 			}
-
-			/*console.log({
-				props: {
-					favorited,
-					liked,
-					likes,
-					movieDetail,
-					movieAvailability
-				},
-			})*/
 			return {
 				props: {
 					favorited,

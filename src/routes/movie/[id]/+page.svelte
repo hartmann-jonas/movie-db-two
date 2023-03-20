@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores'
+	import MovieCard from '../../../components/MovieCard.svelte';
 	import Icon from 'svelte-awesome';
 	import bookmark from 'svelte-awesome/icons/bookmark';
 	import bookmarkO from 'svelte-awesome/icons/bookmarkO';
@@ -30,6 +31,8 @@
 
 	$: details = data.props.movieAvailability.results[selected?.code]
 	let limitedVideos = data.props.movieDetail.videos.results.slice(0, 5)
+	let recommendedMovies = data.props.movieDetail.recommendations.results.slice(0, 10)
+	console.log(recommendedMovies)
 
 	// scale for icons
 	let scale = 1.25;
@@ -173,6 +176,29 @@
 			{/if}
 		</div>
 		<hr />
+		{#if recommendedMovies.length > 0}
+		<div class="related-movies">
+			<h4 class="title-text">Related Movies:</h4>
+			<div class="movies">
+				{#each recommendedMovies as movie}
+				<div class="movie-cards m-3">
+					<div class="movie-card">
+						<a data-sveltekit-noscroll href={'/movie/' + movie.id} target="_self">
+							{#if typeof movie.poster_path == 'string'}
+							<img class="movie-card-image" src={'https://image.tmdb.org/t/p/w500' + movie.poster_path} alt={movie.title} />
+							{:else}
+							<div class="no-img">
+								<p class="no-img-available">no image available</p>
+							</div>
+							{/if}
+						</a>
+					</div>
+				</div>
+				{/each}
+			</div>
+		</div>
+		{/if}
+		{#if limitedVideos.length > 0}
 		<div class="movie-videos">
 			<h4 class="title-text">Related Videos:</h4>
 			<div class="videos">
@@ -190,6 +216,7 @@
 				{/each}
 			</div>
 		</div>
+		{/if}
 </section>
 
 <style>
@@ -411,7 +438,7 @@
 	}
 
 	.movie-videos {
-		margin-top: 2.5rem;
+		margin-top: 1rem;
 		margin-bottom: 2.5rem;
 	}
 
@@ -470,5 +497,47 @@
 			max-height: 4rem;
 			line-height: 1.5rem;
 		}
+	}
+	.related-movies {
+		margin-top: 2.5rem;
+	}
+	.movies {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		-ms-overflow-style: -ms-autohiding-scrollbar;
+	}
+
+	.movie-cards {
+		min-width: 180px;
+	}
+
+	.movie-card {
+		scroll-behavior: smooth;
+		margin: 0.75rem;
+	}
+
+	.movie-card-image {
+		object-fit: cover;
+		border-radius: 1rem;
+		margin-bottom: 1rem;
+		display: block;
+		width: 100%;
+		max-width: 266.233px;
+	}
+
+	.no-img {
+		display: flex;
+		height: 30vh;
+		text-align: center;
+		align-items: center;
+	}
+	.no-img-available {
+		font-weight: bold;
+		font-size: 1.5rem;
+		font-family: 'Poppins';
+		color: black;
+		text-decoration: none;
 	}
 </style>
