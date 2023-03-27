@@ -1,5 +1,5 @@
 <script lang="ts">
-    import MovieGrid from '../../components/MovieGrid.svelte';
+    import MovieGrid from '../../../components/MovieGrid.svelte';
 	import { page } from '$app/stores'
     import type { PageServerData } from './$types';
     //Import fly animations
@@ -11,33 +11,30 @@
 
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
 
-<h1>
-    Hi, {$page.data.user.name}!
-</h1>
+<h3>Movies recommended for {$page.data.user.name}!</h3>
 
-<p>Your saved movies:</p>
-{#if data.props.favouriteMovies.length > 0}
-<section class="saved-movies">
-    <MovieGrid movies={data.props?.favouriteMovies}/>
+{#if data.props.recommededMovies > 0}
+<section class="recommended-movies">
+    <MovieGrid movies={data.props?.recommededMovies}/>
 </section>
 {:else}
-<section class="no-saved-movies">
-    <p>You have no saved movies.</p>
-    <a href="/">Find some!</a>
+<section class="no-recommended-movies">
+    <p>We don't know enough about you.</p>
+    <a href="/">Like some more movies to get recommendations!</a>
 </section>
 {/if}
 
 </section>
 
 <style>
-    .no-saved-movies {
+    .no-recommended-movies {
         margin: auto;
         text-align: center;
         margin-top: 15vmin;
         font-size: 20px;
     }
 
-    .no-saved-movies a {
+    .no-recommended-movies a {
         text-decoration: none;
         font-weight: 800;
         color: black;
