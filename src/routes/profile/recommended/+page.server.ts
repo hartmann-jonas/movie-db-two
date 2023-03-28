@@ -1,8 +1,8 @@
-import type { PageServerLoad } from './recommended/$types';
+import type { PageServerLoad } from './$types';
 import { database } from '$lib/database';
 import { redirect } from "@sveltejs/kit"
 
-export const load: PageServerLoad = async ({ params,locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const userId = locals.user.id
 	let genres: number[] = [];
 	let genresList: { id: any; occurrences: number; }[] = [];

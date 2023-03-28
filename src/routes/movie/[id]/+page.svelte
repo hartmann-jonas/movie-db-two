@@ -32,7 +32,6 @@
 	$: details = data.props.movieAvailability.results[selected?.code]
 	let limitedVideos = data.props.movieDetail.videos.results.slice(0, 5)
 	let recommendedMovies = data.props.movieDetail.recommendations.results.slice(0, 10)
-	console.log(recommendedMovies)
 
 	// scale for icons
 	let scale = 1.25;
@@ -128,7 +127,11 @@
 				{data.props.movieDetail.production_companies[0].name}<br />
 				{/if}
 				<span>Production Country:</span>
+				{#if data.props.movieDetail.production_country}
 				{data.props.movieDetail.production_countries[0].name}
+				{:else}
+					unknown
+				{/if}
 			</div>
 			{/if}
 		</div>

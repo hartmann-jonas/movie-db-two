@@ -12,6 +12,7 @@ Those functionalities are implemented on the website!
  - Hosted PostgreSQL database, connected using [`Prisma`](https://prisma.io)
  - Register and login
  - Save movies on your profile
+ - Individual recommendations based on movies you liked (Experimental)
 
 <br/>
 

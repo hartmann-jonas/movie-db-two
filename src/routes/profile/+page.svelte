@@ -2,8 +2,6 @@
     import MovieGrid from '../../components/MovieGrid.svelte';
 	import { page } from '$app/stores'
     import type { PageServerData } from './$types';
-    //Import the Card System component
-    import MovieCard from '../../components/MovieCard.svelte';
     //Import fly animations
 	import { fly } from 'svelte/transition';
 
@@ -32,7 +30,6 @@
 </section>
 
 <style>
-
     .no-saved-movies {
         margin: auto;
         text-align: center;
