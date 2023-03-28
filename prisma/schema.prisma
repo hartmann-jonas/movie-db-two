@@ -12,7 +12,7 @@ datasource db {
 
 //Create table User
 model User {
-  id            String @id @default(uuid()) @unique
+  id            String @id @unique @default(uuid())
   username      String @unique
   passwordHash  String
   userAuthToken String @unique
@@ -20,10 +20,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  role      Roles         @relation(fields: [roleId], references: [id])
-  roleId    Int
+  role            Roles   @relation(fields: [roleId], references: [id])
+  roleId          Int
   favorite_movies Movie[] @relation("Favourites")
-  liked_movies Movie[]    @relation("Likes")
+  liked_movies    Movie[] @relation("Likes")
 }
 
 //Create table Roles
@@ -35,9 +35,15 @@ model Roles {
 
 //Create table Favourites
 
-
 model Movie {
-  id        Int         @id @default(autoincrement()) @unique
-  favorited_by User[]   @relation("Favourites")
-  likes  User[]         @relation("Likes")
+  id           Int        @id @unique @default(autoincrement())
+  favorited_by User[]     @relation("Favourites")
+  likes        User[]     @relation("Likes")
+  genres     Genres[]
+}
+
+model Genres {
+  id      Int     @id @unique @default(autoincrement())
+  genre   String
+  movie   Movie[]
 }

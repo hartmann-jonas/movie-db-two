@@ -5,147 +5,144 @@ import { error, fail } from '@sveltejs/kit'
 
 import 'dotenv/config'
 
-export const load: PageServerLoad = async ({params,locals}) => {
-	const movieId = Number(params.id)
-	let favorited = undefined;
-	let liked = undefined;
-	let likes = 0;
-	//Fetch the details for the movie by ID
-	const response = await fetch(
-		`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}&append_to_response=videos,keywords,recommendations`
-	);
-	const movieDetail = await response.json();
-	if (response.ok) {
-		//If we can fetch the details, then fetch where it it available to stream
-		const resAvailability = await fetch(
-			`https://api.themoviedb.org/3/movie/${params.id}/watch/providers?api_key=${process.env.TMDB_API_KEY}`
-		);
-		const movieAvailability = await resAvailability.json();
-		if (resAvailability.ok) {
-			// find the amount of likes a movie has
-			const movieResult = await database.movie.findFirst({
-				where:{
-					id:movieId
-				},
-				include: {
-					likes:true
-				}
-			})
-			// if movie exists / doesnt exist
-			if(movieResult) {
-				likes=movieResult.likes.length
-				console.log(likes + " likes")
-			} else {
-				console.log("No likes")
-			}
-			// if a user is logged in - check if he has liked / saved the movie
-			if (locals.user) {
-				const userId = locals.user.id
-				const result = await database.user.findUnique({
-					// check if the user has the requested movie in his favourites
-					// if true then change data.props.favourited so we can dynamically change content
-					where:{
-						id:userId
-					},
-					select:{
-						favorite_movies:{
-							where:{
-								id:movieId
-							}
-						},
-						liked_movies:{
-							where:{
-								id:movieId
-							}
-						}
-					}
-				})
-				if(result){
-					favorited=result.favorite_movies.length>0
-					liked=result.liked_movies.length>0
-				}
-			}
-			return {
-				props: {
-					favorited,
-					liked,
-					likes,
-					movieDetail,
-					movieAvailability
-				},
-			};
-		};	
-	}
-	throw error(404,"not found")
+export const load: PageServerLoad = async ({params, locals}) => {
+    const startTime = Date.now()
+    let likes = 0;
+    let liked = undefined;
+    let favorited = undefined;
+    const { id } = params;
+    const movieId = Number(id);
+    const apiKey = process.env.TMDB_API_KEY;
+    //const movieId = Number(id)
+    // fetch both requests simultaneously
+    const [movieDetailResponse, movieAvailabilityResponse] = await Promise.all([
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&append_to_response=videos,keywords,recommendations`),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${apiKey}`)
+    ]);
+    const movieDetail = await movieDetailResponse.json();
+    const movieAvailability = await movieAvailabilityResponse.json();
+    if(movieDetailResponse.ok && movieAvailabilityResponse.ok) {
+        // if movie exists try to find the likes of the movie in the database
+        const likesResult = await database.movie.findFirst({
+            where: {
+                id: movieId
+            },
+            include: {
+                likes: true
+            }
+        })
+        if(likesResult) {
+            likes = likesResult.likes.length
+            console.log(likes + ' likes')
+        } else {
+            console.log('Movie has no likes')
+        }
+        // if the user is logged in check if he has liked or saved the movie
+        if(locals.user) {
+            const userId = locals.user.id
+            const userResult = await database.user.findUnique({
+                where: {
+                    id: userId
+                },
+                select: {
+                    favorite_movies: {
+                        where: {
+                            id: movieId
+                        }
+                    },
+                    liked_movies: {
+                        where: {
+                            id: movieId
+                        }
+                    }
+                }
+            })
+            if(userResult) {
+                favorited = userResult.favorite_movies.length > 0
+                liked = userResult.liked_movies.length > 0
+            }
+        }
+        const endTime = Date.now()
+		console.log('Time for fetching data: ' + (endTime - startTime) + 'ms')
+        return {
+            props: {
+                favorited,
+                liked,
+                likes,
+                movieDetail,
+                movieAvailability
+            }
+        };
+    }
+    throw error(404, 'not found')
 }
 
-//Store movie as favourite
 export const actions: Actions = {
+	//Store movie as favourite
 	saveMovie: async ({ locals, params }) => {
-		if (locals.user.id) {
-			const movieId = Number(params.id)
-			const userId = locals.user.id
-			console.log('Movie ID:  '+ movieId)
-			console.log('User:  ' + userId)
-			try {
-				await database.user.update({
-					// Go to currently logged in user
-					where:{
-						id:userId
-					},
-					data:{
-						favorite_movies:{
-							// if movie does not exist - create it and connect it to model user in the field favourite_movies
-							connectOrCreate:{
-								where:{
-									id:movieId
-								},
-								create:{
-									id:movieId,
-								}
-							}
-						}
-					}
-				})
-			}
-			catch (e) {
-				console.log(e)
-				return fail(400, {error: "saving the movie failed"})
-			}
-		} else {
-			throw error(400, "No user id found.")
-		}
-	},
+        if(locals.user.id) {
+            const movieId = Number(params.id)
+            const userId = locals.user.id
+            console.log('Save the movie:')
+            console.log('MovieId: ' + movieId)
+            console.log('User:    ' + userId)
+            try {
+                await database.user.update({
+                    where: {
+                        id: userId
+                    },
+                    data: {
+                        favorite_movies: {
+                            // relate movie to user, if movie doesnt exist reate and relate it
+                            connectOrCreate: {
+                                where: {
+                                    id: movieId
+                                },
+                                create: {
+                                    id: movieId
+                                }
+                            }
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return fail(400, {error: 'saving movie failed'})
+            }
+        } else {
+            throw error(400, 'no user id found')
+        }
+    },
 
 	// Remove movie from favourites
 	unsaveMovie: async ({ locals, params }) => {
-		if (locals.user.id) {
-			const movieId = Number(params.id)
-			const userId = locals.user.id
-			console.log('Movie ID:  '+ movieId)
-			console.log('User:  ' + userId)
-			try {
-				await database.movie.update({
-					where:{
-						id:movieId
-					},
-					data:{
-						favorited_by:{
-							disconnect:{
-								id:userId
-							}
-						}
-					}
-				})
-			}
-			catch (e) {
-				console.log(e)
-				return fail(400, {error: "saving the movie failed"})
-			}
-		} else {
-			throw error(400, "No user id found.")
-		}
-	},
+        if(locals.user.id) {
+            const movieId = Number(params.id)
+            const userId = locals.user.id
+            console.log('Unsave the movie:')
+            console.log('MovieId: ' + movieId)
+            console.log('User:    ' + userId)
+            try {
+                await database.movie.update({
+                    where: {
+                        id: movieId
+                    },
+                    data: {
+                        favorited_by: {
+                            disconnect: {
+                                id: userId
+                            }
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+                return fail(400, {error: 'unsaving the movie failed'})
+            }
+        } else {
+            throw error(400, 'no user id found')
+        }
+    },
 
 	// add movie to liked movies of given user
 	likeMovie: async ({ locals, params }) => {
@@ -153,33 +150,66 @@ export const actions: Actions = {
 		if(locals.user.id) {
 			const movieId = Number(params.id)
 			const userId = locals.user.id
-			console.log('Movie ID:  '+ movieId)
+            let movie = undefined
+            let genres = undefined
+			const response = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`)
+            if(response.ok) {
+                movie = await response.json()
+                genres = await movie.genres
+            }
+            console.log('Movie ID:  '+ movieId)
 			console.log('User:  ' + userId)
-			try {
-				const response = await database.user.update({
-					// Go to currently logged in user
-					where:{
-						id:userId
-					},
-					data:{
-						liked_movies:{
-							// if movie does not exist - create it and connect it to model user in the field liked_movies
-							connectOrCreate:{
-								where:{
-									id:movieId
-								},
-								create:{
-									id:movieId
-								}
-							}
-						}
-					}
-				})
-			}
-			catch (e) {
-				console.log(e)
-				return fail(400, {error: "liking the movie failed"})
-			}
+            // link all the genres to the movie
+            for await (const genre of genres) {
+                console.log('Genre: ' + genre.name)
+                try {
+                    await database.movie.upsert({
+                        where: {
+                            id: movieId
+                        },
+                        update: {
+                            genres: {
+                                connectOrCreate: {
+                                    where: {
+                                        id: genre.id
+                                    },
+                                    create: {
+                                        id: genre.id,
+                                        genre: genre.name
+                                    }
+                                }
+                            },
+                            likes: {
+                                connect: {
+                                    id: userId
+                                }
+                            }
+                        },
+                        create: {
+                            id: movieId,
+                            genres: {
+                                connectOrCreate: {
+                                    where: {
+                                        id: genre.id
+                                    },
+                                    create: {
+                                        id: genre.id,
+                                        genre: genre.name
+                                    }
+                                }
+                            },
+                            likes: {
+                                connect: {
+                                    id: userId
+                                }
+                            }
+                        }
+                    })
+                } catch (e) {
+                    console.log(e)
+                    return fail(400, {error: 'liking the keywords failed'})
+                }
+            }
 		} else {
 			throw error(400, "no user id found")
 		}
