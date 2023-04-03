@@ -13,16 +13,36 @@
 {#if $page.data.user}
 <nav id="logged" class="nav" data-sveltekit-prefetch>
 	<!--HEADER VERSION LOGGED IN-->
+	<div class="profile">
 		<a class="profile" href="/profile">Profile</a>
-		<a id="title" class="title" href="/">Movie Database</a>	
+		<a class="profile" href="/profile/recommended">Recommended</a>
+	</div>
+	<a id="title" class="title" href="/">Movie Database</a>	
+	<div class="logout">
 		<form action="/logout" method="POST">
-			<button class="logout" type="submit">Logout</button>
+			<button type="submit">Logout</button>
 		</form>
+	</div>
 </nav>
 {/if}
 
 
 <style>
+	.profile {
+		text-align: left;
+		width: 25%;
+	}
+
+	.title {
+		text-align: center;
+		width: 50%;
+	}
+
+	.logout {
+		width: 25%;
+		text-align: right;
+	}
+
 	.nav {
 		width: 100%;
 		display: flex;
