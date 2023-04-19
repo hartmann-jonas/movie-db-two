@@ -105,6 +105,27 @@ export const actions: Actions = {
                         }
                     }
                 })
+                // fetch new amount of likes
+                let likes
+                const likesResult = await database.movie.findFirst({
+                    where: {
+                        id: movieId
+                    },
+                    include: {
+                        likes: true
+                    }
+                })
+                if(likesResult) {
+                    likes = likesResult.likes.length
+                    console.log(likes + ' likes')
+                    return {
+                        props: {
+                            likes
+                        }
+                    }
+                } else {
+                    console.log('Movie has no likes')
+                }
             } catch (e) {
                 console.log(e)
                 return fail(400, {error: 'saving movie failed'})
@@ -135,6 +156,27 @@ export const actions: Actions = {
                         }
                     }
                 })
+                // fetch new amount of likes
+                let likes
+                const likesResult = await database.movie.findFirst({
+                    where: {
+                        id: movieId
+                    },
+                    include: {
+                        likes: true
+                    }
+                })
+                if(likesResult) {
+                    likes = likesResult.likes.length
+                    console.log(likes + ' likes')
+                    return {
+                        props: {
+                            likes
+                        }
+                    }
+                } else {
+                    console.log('Movie has no likes')
+                }
             } catch (e) {
                 console.log(e)
                 return fail(400, {error: 'unsaving the movie failed'})

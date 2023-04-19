@@ -21,7 +21,7 @@
 		{index: 6, name: "USA", code:"US"}
 	];
 
-	let likes = data.props.likes
+	$: likes = data.props.likes
 
 	let selected:any = countries[0];
 	
