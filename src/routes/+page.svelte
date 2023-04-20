@@ -11,7 +11,7 @@
 	<MovieGrid movies={data.popular} />
 </section>
 <footer>
-    <p>Go to the <a href="https://hartmann-jonas.github.io/blog" target="_blank">Development blog</a></p>
+    <p>Go to the <a href="https://project-page-hartmann-jonas.vercel.app/blog" target="_blank">Development blog</a></p>
 </footer>
 
 <style>
