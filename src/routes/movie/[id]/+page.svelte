@@ -9,6 +9,7 @@
 	import heart from 'svelte-awesome/icons/heart';
 	import heartO from 'svelte-awesome/icons/heartO';
 	import { enhance } from '$app/forms';
+	import https from 'https'
 
 	export let data: PageServerData;
 
@@ -23,11 +24,40 @@
 
 	$: likes = data.props.likes
 
-	let selected:any = countries[0];
+	let selected = countries[0];
 	
 	function changeCountry() {
 		console.log(`${selected?.code}`)
 	}
+
+	async function getLocation() {
+		const resp = await fetch(`https://ipapi.co/json/`)
+		const json = await resp.json()
+		console.log(json)
+		console.log(json.country_code, json.country_name, json.city)
+		switch (json.country_code) {
+			case 'SE':
+				selected = countries[0]
+				break
+			case 'DE':
+				selected = countries[1]
+				break
+			case 'AT':
+				selected = countries[2]
+				break
+			case 'CH':
+				selected = countries[3]
+				break
+			case 'CA':
+				selected = countries[4]
+				break
+			case 'US':
+				selected = countries[5]
+				break
+		}
+	}
+	
+	getLocation()
 
 	$: details = data.props.movieAvailability.results[selected?.code]
 	let limitedVideos = data.props.movieDetail.videos.results.slice(0, 5)

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({params, locals}) => {
     const { id } = params;
     const movieId = Number(id);
     const apiKey = process.env.TMDB_API_KEY;
-    //const movieId = Number(id)
+    // const movieId = Number(id)
     // fetch both requests simultaneously
     const [movieDetailResponse, movieAvailabilityResponse] = await Promise.all([
         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&append_to_response=videos,keywords,recommendations`),
