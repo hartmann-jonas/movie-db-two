@@ -1,14 +1,19 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { ActionData } from './$types';
-  export let form: ActionData
   import Icon from 'svelte-awesome';
   import spinner from 'svelte-awesome/icons/spinner';
 	import { fly } from 'svelte/transition';
-
+  import { Turnstile } from 'svelte-turnstile'
+  export let form
+  
   let signin = false
   let scale = 3;
 </script>
+
+<svelte:head>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</svelte:head>
 
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
   <div class="signin">
@@ -40,12 +45,18 @@
             <label for="password">PASSWORD</label>
             <input id="password" name="password" type="password" required />
           </div>
+          <div class="turnstile">
+            <Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" data-size="compact"/>
+          </div>
 
           {#if form?.invalid}
           <p class="error">Username and password required.</p>
           {/if}
           {#if form?.credentials}
           <p class="error">Wrong credentials.</p>
+          {/if}
+          {#if form?.captcha}
+          <p class="error">Captcha failed: {form?.error}</p>
           {/if}
           <button type="submit">Sign In</button>
           <div class="text">
@@ -178,6 +189,11 @@
     font-size: var(--medium-font);
     line-height: 1.25rem;
     color: red;
+    text-align: center;
+  }
+
+  .turnstile {
+    margin-top: 1rem;
     text-align: center;
   }
 </style>

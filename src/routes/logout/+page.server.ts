@@ -9,11 +9,10 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
   default({ cookies }) {
-    console.log("logout")
+    console.log("Logout")
     // TODO: Implement register
     // Check if ustername already exist etc.
     cookies.delete('session');
-    console.log(cookies.get("session"))
     throw redirect(302, "/");
   },
 }

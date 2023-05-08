@@ -11,10 +11,55 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 }
 
+interface TokenValidateResponse {
+  'error-codes': string[];
+  success: boolean;
+  action: string;
+  cdata: string;
+}
+
+async function validateToken(token: string, secret: string) {
+  const response = await fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      {
+          method: 'POST',
+          headers: {
+              'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+              response: token,
+              secret: secret,
+          }),
+      },
+  );
+
+  const data: TokenValidateResponse = await response.json();
+
+  return {
+      // Return the status
+      success: data.success,
+
+      // Return the first error if it exists
+      error: data['error-codes']?.length ? data['error-codes'][0] : null,
+  };
+}
+
+
 const login: Action = async ({ cookies, request }) => {
   const data = await request.formData()
   const username = data.get('username')
   const password = data.get('password')
+
+  // token from the cloudflare captcha
+  const token = data.get('cf-turnstile-response')
+
+  const SECRET_KEY = process.env.TURNSTILE_SECRET_KEY
+  const { success, error } = await validateToken(token, SECRET_KEY)
+  console.log("Cloudflare Turnstile: " + success)
+  if (!success) {
+    return fail(400, { captcha: true, error })
+  }
+  
 
   if (
     typeof username !== 'string' ||
