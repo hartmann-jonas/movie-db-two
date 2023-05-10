@@ -34,8 +34,8 @@ async function validateToken(token: string, secret: string) {
       }),
     },
   );
-
   const data: TokenValidateResponse = await response.json();
+  console.log("VALIDATE TOKEN")
 
   return {
     // Return the status
