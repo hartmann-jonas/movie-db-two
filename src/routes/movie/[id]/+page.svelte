@@ -19,7 +19,8 @@
 		{index: 3, name: "Austria", code:"AT"},
 		{index: 4, name: "Switzerland", code:"CH"},
 		{index: 5, name: "Canada", code:"CA"},
-		{index: 6, name: "USA", code:"US"}
+		{index: 6, name: "USA", code:"US"},
+		{index: 7, name: "Spain", code:"ES"},
 	];
 
 	$: likes = data.props.likes
@@ -53,6 +54,9 @@
 				break
 			case 'US':
 				selected = countries[5]
+				break
+			case 'ES':
+				selected = countries[6]
 				break
 		}
 	}

@@ -5,15 +5,17 @@
   import spinner from 'svelte-awesome/icons/spinner';
 	import { fly } from 'svelte/transition';
   import { Turnstile } from 'svelte-turnstile'
+
   export let form
   
   let signin = false
   let scale = 3;
+  
 </script>
-
+<!-- 
 <svelte:head>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-</svelte:head>
+</svelte:head> -->
 
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
   <div class="signin">
@@ -35,7 +37,7 @@
           }
           update()
         }
-        }} action="?/login" method="POST">
+        }} method="POST">
         <div class="fields">
           <div>
           <label for="username">USERNAME</label>
@@ -46,8 +48,8 @@
             <input id="password" name="password" type="password" required />
           </div>
           <div class="turnstile">
-            <Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" data-size="compact"/>
-          </div>
+            <Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" />
+          </div>  
 
           {#if form?.invalid}
           <p class="error">Username and password required.</p>
@@ -58,7 +60,7 @@
           {#if form?.captcha}
           <p class="error">Captcha failed: {form?.error}</p>
           {/if}
-          <button type="submit">Sign In</button>
+          <button type="submit" value="Submit">Sign In</button>
           <div class="text">
             <p>
               Don't have an account? <a href="/register">Sign up</a> instead.

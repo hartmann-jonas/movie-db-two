@@ -5,7 +5,7 @@ import { error, fail } from '@sveltejs/kit'
 
 import 'dotenv/config'
 
-export const load: PageServerLoad = async ({params, locals}) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
     const startTime = Date.now()
     let likes = 0;
     let liked = undefined;
@@ -21,24 +21,28 @@ export const load: PageServerLoad = async ({params, locals}) => {
     ]);
     const movieDetail = await movieDetailResponse.json();
     const movieAvailability = await movieAvailabilityResponse.json();
-    if(movieDetailResponse.ok && movieAvailabilityResponse.ok) {
+    if (movieDetailResponse.ok && movieAvailabilityResponse.ok) {
         // if movie exists try to find the likes of the movie in the database
         const likesResult = await database.movie.findFirst({
             where: {
                 id: movieId
             },
             include: {
-                likes: true
+                _count: {
+                    select: {
+                        likes: true
+                    }
+                }
             }
         })
-        if(likesResult) {
-            likes = likesResult.likes.length
+        if (likesResult) {
+            likes = likesResult._count.likes
             console.log(likes + ' likes')
         } else {
             console.log('Movie has no likes')
         }
         // if the user is logged in check if he has liked or saved the movie
-        if(locals.user) {
+        if (locals.user) {
             const userId = locals.user.id
             const userResult = await database.user.findUnique({
                 where: {
@@ -57,13 +61,13 @@ export const load: PageServerLoad = async ({params, locals}) => {
                     }
                 }
             })
-            if(userResult) {
+            if (userResult) {
                 favorited = userResult.favorite_movies.length > 0
                 liked = userResult.liked_movies.length > 0
             }
         }
         const endTime = Date.now()
-		console.log('Time for fetching data: ' + (endTime - startTime) + 'ms')
+        console.log('Time for fetching data: ' + (endTime - startTime) + 'ms')
         return {
             props: {
                 favorited,
@@ -78,9 +82,9 @@ export const load: PageServerLoad = async ({params, locals}) => {
 }
 
 export const actions: Actions = {
-	//Store movie as favourite
-	saveMovie: async ({ locals, params }) => {
-        if(locals.user.id) {
+    //Store movie as favourite
+    saveMovie: async ({ locals, params }) => {
+        if (locals.user.id) {
             const movieId = Number(params.id)
             const userId = locals.user.id
             console.log('Save the movie:')
@@ -115,7 +119,7 @@ export const actions: Actions = {
                         likes: true
                     }
                 })
-                if(likesResult) {
+                if (likesResult) {
                     likes = likesResult.likes.length
                     console.log(likes + ' likes')
                     return {
@@ -128,16 +132,16 @@ export const actions: Actions = {
                 }
             } catch (e) {
                 console.log(e)
-                return fail(400, {error: 'saving movie failed'})
+                return fail(400, { error: 'saving movie failed' })
             }
         } else {
             throw error(400, 'no user id found')
         }
     },
 
-	// Remove movie from favourites
-	unsaveMovie: async ({ locals, params }) => {
-        if(locals.user.id) {
+    // Remove movie from favourites
+    unsaveMovie: async ({ locals, params }) => {
+        if (locals.user.id) {
             const movieId = Number(params.id)
             const userId = locals.user.id
             console.log('Unsave the movie:')
@@ -166,7 +170,7 @@ export const actions: Actions = {
                         likes: true
                     }
                 })
-                if(likesResult) {
+                if (likesResult) {
                     likes = likesResult.likes.length
                     console.log(likes + ' likes')
                     return {
@@ -179,28 +183,28 @@ export const actions: Actions = {
                 }
             } catch (e) {
                 console.log(e)
-                return fail(400, {error: 'unsaving the movie failed'})
+                return fail(400, { error: 'unsaving the movie failed' })
             }
         } else {
             throw error(400, 'no user id found')
         }
     },
 
-	// add movie to liked movies of given user
-	likeMovie: async ({ locals, params }) => {
-		console.log("LIKING MOVIE")
-		if(locals.user.id) {
-			const movieId = Number(params.id)
-			const userId = locals.user.id
+    // add movie to liked movies of given user
+    likeMovie: async ({ locals, params }) => {
+        console.log("LIKING MOVIE")
+        if (locals.user.id) {
+            const movieId = Number(params.id)
+            const userId = locals.user.id
             let movie = undefined
             let genres = undefined
-			const response = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`)
-            if(response.ok) {
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`)
+            if (response.ok) {
                 movie = await response.json()
                 genres = await movie.genres
             }
-            console.log('Movie ID:  '+ movieId)
-			console.log('User:  ' + userId)
+            console.log('Movie ID:  ' + movieId)
+            console.log('User:  ' + userId)
             // link all the genres to the movie
             for await (const genre of genres) {
                 console.log('Genre: ' + genre.name)
@@ -249,41 +253,41 @@ export const actions: Actions = {
                     })
                 } catch (e) {
                     console.log(e)
-                    return fail(400, {error: 'liking the keywords failed'})
+                    return fail(400, { error: 'liking the keywords failed' })
                 }
             }
-		} else {
-			throw error(400, "no user id found")
-		}
-	},
+        } else {
+            throw error(400, "no user id found")
+        }
+    },
 
-	// remove user from liked of given movie
-	unlikeMovie: async ({ locals, params }) => {
-		if (locals.user.id) {
-			const movieId = Number(params.id)
-			const userId = locals.user.id
-			console.log('Movie ID:  '+ movieId)
-			console.log('User:  ' + userId)
-			try {
-				await database.movie.update({
-					where:{
-						id:movieId
-					},
-					data:{
-						likes:{
-							disconnect:{
-								id:userId
-							}
-						}
-					}
-				})
-			}
-			catch (e) {
-				console.log(e)
-				return fail(400, {error: "liking the movie failed"})
-			}
-		} else {
-			throw error(400, "no user id found")
-		}
-	},
+    // remove user from liked of given movie
+    unlikeMovie: async ({ locals, params }) => {
+        if (locals.user.id) {
+            const movieId = Number(params.id)
+            const userId = locals.user.id
+            console.log('Movie ID:  ' + movieId)
+            console.log('User:  ' + userId)
+            try {
+                await database.movie.update({
+                    where: {
+                        id: movieId
+                    },
+                    data: {
+                        likes: {
+                            disconnect: {
+                                id: userId
+                            }
+                        }
+                    }
+                })
+            }
+            catch (e) {
+                console.log(e)
+                return fail(400, { error: "liking the movie failed" })
+            }
+        } else {
+            throw error(400, "no user id found")
+        }
+    },
 }

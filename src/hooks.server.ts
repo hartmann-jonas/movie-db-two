@@ -6,10 +6,21 @@ export const handle: Handle = async ({ event, resolve }) => {
   const session = event.cookies.get('session')
   //console.log(session)
 
+  if (event.request.method === "OPTIONS") {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  }
+
 
   if (!session) {
     // if there is no session load page as normal
-    return await resolve(event)
+    const response = await resolve(event)
+    response.headers.append("Access-Control-Allow-Origin", `*`);
+    return response;
   }
 
   // find the user based on the session
@@ -21,12 +32,14 @@ export const handle: Handle = async ({ event, resolve }) => {
   // if `user` exists set `events.local`
   if (user) {
     event.locals.user = {
-      id:   user.id,
+      id: user.id,
       name: user.username,
       role: user.role.name,
     }
   }
 
   // load page as normal
-  return await resolve(event)
+  const response = await resolve(event)
+  response.headers.append("Access-Control-Allow-Origin", `*`);
+  return response;
 }
