@@ -50,12 +50,14 @@ export const actions: Actions = {
 
   default: async ({ cookies, request }) => {
     const data = await request.formData()
+    console.log(data)
     const username = data.get('username')
     const password = data.get('password')
 
     // token from the cloudflare captcha
     const token = data.get('cf-turnstile-response') as string
     const SECRET_KEY = process.env.TURNSTILE_SECRET_KEY as string
+    console.log(SECRET_KEY)
     const { success, error } = await validateToken(token, SECRET_KEY)
     console.log("Cloudflare Turnstile: " + success)
     if (!success) {
