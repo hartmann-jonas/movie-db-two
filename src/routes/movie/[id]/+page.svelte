@@ -272,11 +272,16 @@
 
 	hr {
 		margin: 25px 0px 20px;
-		color: black;
-		border: .5px solid black;
+		color: var(--accents-2);
+		border: .5px solid var(--accents-2);
+	}
+
+	.movie-txt {
+		color: var(--accents-7)
 	}
 
 	.title {
+		color: var(--foreground);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -284,16 +289,16 @@
 	}
 
 	.interactions-alternative {
-		background-color: black;
-		color: white;
+		background-color: var(--background);
+		color: var(--accents-6);
 		text-decoration: none;
 		padding: 5px;
 		border-radius: .4rem;
+		border: solid var(--accents-2) 1px;
 	}
 
 	.interactions-alternative:hover {
-		background-color: rgb(226, 226, 203);
-		color: black;
+		color: var(--foreground);
 	}
 
 	.user-interactions {
@@ -334,10 +339,10 @@
 
 	.unliked button {
 		display: flex;
-		color: white;
-		background-color: black;
-		border: none;
-		border-right: solid rgb(30, 30, 30) 1px;
+		color: var(--foreground);
+		background-color: var(--background);
+		border: solid var(--accents-2) 1px;
+		border-right: none;
 		border-top-left-radius: 50%;
 		border-bottom-left-radius: 50%;
 		width: 40px;
@@ -350,8 +355,8 @@
 		display: flex;
 		color: red;
 		background-color: black;
-		border: none;
-		border-right: solid rgb(30, 30, 30) 1px;
+		border: solid var(--accents-2) 1px;
+		border-right: none;
 		border-top-left-radius: 50%;
 		border-bottom-left-radius: 50%;
 		width: 40px;
@@ -377,7 +382,8 @@
 		display: flex;
 		color: white;
 		background-color: black;
-		border: none;
+		border: solid var(--accents-2) 1px;
+		border-left: none;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;
 		width: 40px;
@@ -389,7 +395,7 @@
 	.saved button {
 		display: flex;
 		color: gold;
-		background-color: black;
+		background-color: var(--background);
 		border: none;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;
@@ -413,6 +419,7 @@
 	}
 
 	.movie-details {
+		color: var(--accents-7);
 		margin: 2rem auto;
 		max-width: 80%;
 	}
@@ -446,7 +453,7 @@
 		width: 50px;
 		border-radius: 20%;
 		margin: 5px;
-		box-shadow: 0px 0px 5px darkgray;
+		box-shadow: 0px 0px 5px var(--accents-1);
 	}
 
 	.selText {
@@ -466,12 +473,21 @@
 		}
 	}
 
-	select {
-		border: 0;
-		border-radius: 5px;
+	.selCountry {
+		background-color: var(--background);
+		border: solid var(--accents-2) 1px;
+		border-radius: .5rem;
 		padding: 5px;
-		font-size: 14px;
-		background-color: rgb(225, 225, 204);
+		display: flex;
+		gap: 15px;
+	}
+
+	select {
+		border: none;
+		font-size: inherit;
+		color: inherit;
+		background-color: inherit;
+		-webkit-appearance: none;
 	}
 
 	.movie-videos {
@@ -504,7 +520,7 @@
 		border-top-right-radius: .5rem;
 		border-bottom-left-radius: .5rem;
 		border-bottom-right-radius: .5rem;
-		box-shadow: 0px 0px 5px darkgray;
+		box-shadow: 0px 0px 5px var(--accents-1);
 	}
 
 	.video-text {

@@ -16,6 +16,10 @@
 </footer>
 
 <style>
+	* {
+		color: var(--foreground)
+	}
+
 	h3 {
 		padding: 0 1rem;
 	}
@@ -24,17 +28,20 @@
 		width: 100%;
 		text-align: center;
 		padding: 10px;
+		background-color: var(--background);
+		border-top: solid var(--accents-2) 1.5px;
+		padding-top: 1.1rem;
 	}
 
 	a {
 		text-decoration: none;
-		color: black;
+		color: var(--accents-7);
 		font-weight: 700;
 		transition: all 10ms ease-in-out;
 	}
 
 	a:hover {
-		color: #2d3236;
+		color: var(--accents-6);
 	}
 
 	.powered-by-vercel {

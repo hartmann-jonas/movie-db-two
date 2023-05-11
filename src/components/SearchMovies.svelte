@@ -55,10 +55,10 @@
 	button {
 		font-size: 0.9rem;
 		padding: 0rem 1rem;
-		background: rgb(96, 110, 201);
-		color: white;
+		background: var(--accents-1);
+		color: var(--foreground);
 		font-weight: bold;
-		border: none;
+		border: solid var(--accents-4) 1px;
 		position: absolute;
 		bottom: 50%;
 		right: 0;
@@ -67,6 +67,11 @@
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 		cursor: pointer;
+		transition: background .3s ease;
+	}
+
+	button:hover {
+		background-color: var(--accents-2);
 	}
 
 	input {
@@ -75,13 +80,14 @@
 		font-size: 1rem;
 		font-family: 'Poppins', sans-serif;
 		outline: none;
-		color: rgb(255, 255, 255);
+		border: solid var(--accents-2) 1px;
+		color: var(--foreground);
 		padding: 0.5rem 0.1rem;
 		transition: background 0.7s ease-out;
 		font-weight: bold;
-		background: rgb(63, 63, 63);
+		background: var(--background);
 		border-radius: 10px;
-		padding: 1rem;
+		padding: .8rem;
 	}
 
 	label {
@@ -91,11 +97,11 @@
 		left: 0;
 		transform: translate(0, -50%);
 		pointer-events: none;
-		color: #fff;
+		color: var(--foreground);
 		padding: 0rem 1rem;
 	}
 
 	input.selected {
-		background: rgb(50, 50, 50);
+		border: 1px solid var(--accents-4);
 	}
 </style>

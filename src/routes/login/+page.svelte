@@ -47,7 +47,7 @@
 						<input id="password" name="password" type="password" required />
 					</div>
 					<div class="turnstile">
-						<div class="cf-turnstile" data-sitekey="0x4AAAAAAAEggr1Gpnt5Fmzp" data-theme="light"></div>
+						<div class="cf-turnstile" data-sitekey="0x4AAAAAAAEggr1Gpnt5Fmzp"></div>
 <!-- 						<Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" />
  -->				</div>
 
@@ -84,8 +84,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		line-height: inherit;
-		box-shadow: 0 0 5px darkgray;
-		background-color: rgb(226, 226, 203);
+		background-color: var(--accent-color-1);
 		border: 1px;
 		border-radius: 1rem;
 		max-width: 28rem;
@@ -136,7 +135,9 @@
 		padding-bottom: 0.5rem;
 		padding-left: 0.75rem;
 		padding-bottom: 0.75rem;
-		border-color: rgb(209, 213, 219);
+		border-color: black;
+		background-color: var(--system-grey);
+		color: var(--text-color-1);
 		border-width: 1px;
 		border-radius: 0.375rem;
 		width: 100%;
@@ -151,11 +152,11 @@
 		transition-property: all;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 0.15s;
-		color: white;
+		color: var(--button-text-color);
 		font-size: var(--big-font);
 		line-height: 1.25rem;
-		background-color: black;
-		border-color: black;
+		background-color: var(--fill-color);
+		border-color: transparent;
 		border-width: 1px;
 		border-radius: 0.375rem;
 		cursor: pointer;
@@ -167,7 +168,8 @@
 
 	button:hover {
 		color: black;
-		background-color: rgb(250, 250, 237);
+		border-color: var(--accent-color-2);
+		background-color: var(--accent-color-4);
 	}
 
 	.text {
@@ -179,7 +181,7 @@
 	}
 
 	.text a {
-		color: black;
+		color: var(--text-color-1);
 		text-decoration: inherit;
 		font-weight: 600;
 		text-align: center;

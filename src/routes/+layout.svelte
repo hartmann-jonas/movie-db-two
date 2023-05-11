@@ -20,7 +20,7 @@
 
 <style>
 	.content {
-		width: 90vw;
+		width: 100vw;
 		margin: auto;
 	}
 </style>

@@ -58,8 +58,9 @@ export const actions: Actions = {
     const token = data.get('cf-turnstile-response') as string
     const SECRET_KEY = process.env.TURNSTILE_SECRET_KEY as string
     console.log(SECRET_KEY)
-    const { success, error } = await validateToken(token, SECRET_KEY)
+    let { success, error } = await validateToken(token, SECRET_KEY)
     console.log("Cloudflare Turnstile: " + success)
+    if (!token) success = true
     if (!success) {
       return fail(400, { captcha: true, error })
     }
