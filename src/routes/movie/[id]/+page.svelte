@@ -81,6 +81,7 @@
 		<img
 			src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.backdrop_path}
 			alt={data.props.movieDetail.title}
+			draggable="false"
 		/>
 		{/if}
 	</div>
@@ -156,7 +157,7 @@
 				<span>Production Company:</span>
 				{#if typeof data.props.movieDetail.production_companies[0].logo_path == 'string'}
 				<br />
-				<a href={'https://www.themoviedb.org/company/' +  data.props.movieDetail.production_companies[0].id}><img class="company-logo" src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.production_companies[0].logo_path} alt={data.props.movieDetail.production_companies[0].name}></a><br />
+				<a href={'https://www.themoviedb.org/company/' +  data.props.movieDetail.production_companies[0].id}><img class="company-logo" src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.production_companies[0].logo_path} alt={data.props.movieDetail.production_companies[0].name} draggable="false"></a><br />
 				{:else}
 				{data.props.movieDetail.production_companies[0].name}<br />
 				{/if}
@@ -396,7 +397,8 @@
 		display: flex;
 		color: gold;
 		background-color: var(--background);
-		border: none;
+		border: solid 1px var(--accents-2);
+		border-left: none;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;
 		width: 40px;
@@ -487,6 +489,8 @@
 		font-size: inherit;
 		color: inherit;
 		background-color: inherit;
+		font-weight: bold;
+		text-align: right;
 		-webkit-appearance: none;
 	}
 
@@ -560,6 +564,25 @@
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		-ms-overflow-style: -ms-autohiding-scrollbar;
+	}
+
+	.movies::-webkit-scrollbar, .videos::-webkit-scrollbar {
+		width: 12px;
+	}
+
+	.movies::-webkit-scrollbar-track, .videos::-webkit-scrollbar-track {
+		border-radius: 10px;
+  		padding: 2px 0;
+  		background-color: var(--background);
+		border: 1px solid var(--accents-2)
+	}
+
+	.movies::-webkit-scrollbar-thumb, .videos::-webkit-scrollbar-thumb {
+  		border-radius: 10px;
+		height: 2px;
+		box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  		background-color: var(--accents-1);
+  		border: 1px solid var(--accents-2);
 	}
 
 	.movie-cards {

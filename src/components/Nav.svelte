@@ -51,11 +51,15 @@
 	}
 
 	.nav {
+		position: sticky;
+		top: 0;
 		padding: 15px;
 		display: flex;
 		min-height: 10vh;
 		align-items: center;
-		background-color: var(--background);
+		background-color: var(--background-transparent);
+		backdrop-filter: blur(15px);
+		-webkit-backdrop-filter: blur(15px);
 		border-bottom: 1.5px var(--accents-2) solid;
 	}
 	
@@ -65,6 +69,8 @@
 
 	#logged {
 		justify-content: space-between;
+		padding-left: 6vw;
+		padding-right: 6vw;
 	}
 
 	/*Positioning of the right items in the navbar*/

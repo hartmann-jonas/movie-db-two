@@ -41,6 +41,9 @@
     .no-saved-movies a {
         text-decoration: none;
         font-weight: 800;
-        color: black;
+        color: var(--accents-8);
+    }
+    .no-saved-movies a:hover {
+        color: var(--accents-6);
     }
 </style>

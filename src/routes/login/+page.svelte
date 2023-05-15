@@ -80,11 +80,11 @@
 	}
 
 	.signin {
-		margin-top: 15vh;
+		margin-top: 10vh;
 		margin-left: auto;
 		margin-right: auto;
 		line-height: inherit;
-		background-color: var(--accent-color-1);
+		background-color: var(--background);
 		border: 1px;
 		border-radius: 1rem;
 		max-width: 28rem;
@@ -129,20 +129,22 @@
 	}
 
 	input {
+		margin-top: 0.25rem;
 		font-size: var(--big-font);
 		line-height: 1.25rem;
 		padding-top: 0.5rem;
 		padding-bottom: 0.5rem;
 		padding-left: 0.75rem;
 		padding-bottom: 0.75rem;
-		border-color: black;
-		background-color: var(--system-grey);
+		outline: none;
+		border: none;
 		color: var(--text-color-1);
+		border: solid var(--accents-2);
 		border-width: 1px;
-		border-radius: 0.375rem;
+		background: var(--system-grey);
 		width: 100%;
 		display: block;
-		margin-top: 0.25rem;
+		border-radius: 0.375rem;
 	}
 
 	button {
@@ -152,10 +154,10 @@
 		transition-property: all;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 0.15s;
-		color: var(--button-text-color);
+		color: var(--accents-7);
 		font-size: var(--big-font);
 		line-height: 1.25rem;
-		background-color: var(--fill-color);
+		background-color: var(--accents-2);
 		border-color: transparent;
 		border-width: 1px;
 		border-radius: 0.375rem;
@@ -167,9 +169,8 @@
 	}
 
 	button:hover {
-		color: black;
-		border-color: var(--accent-color-2);
-		background-color: var(--accent-color-4);
+		color: var(--background);
+		background-color: var(--accents-7);
 	}
 
 	.text {
@@ -191,7 +192,7 @@
 		padding-top: 1rem;
 		font-size: var(--medium-font);
 		line-height: 1.25rem;
-		color: red;
+		color: var(--error-red);
 		text-align: center;
 	}
 
