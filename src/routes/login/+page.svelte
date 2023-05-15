@@ -47,7 +47,7 @@
 						<input id="password" name="password" type="password" required />
 					</div>
 					<div class="turnstile">
-						<div class="cf-turnstile" data-sitekey="0x4AAAAAAAEggr1Gpnt5Fmzp" data-theme="light"></div>
+						<div class="cf-turnstile" data-sitekey="0x4AAAAAAAEggr1Gpnt5Fmzp"></div>
 <!-- 						<Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" />
  -->				</div>
 
@@ -80,12 +80,11 @@
 	}
 
 	.signin {
-		margin-top: 15vh;
+		margin-top: 10vh;
 		margin-left: auto;
 		margin-right: auto;
 		line-height: inherit;
-		box-shadow: 0 0 5px darkgray;
-		background-color: rgb(226, 226, 203);
+		background-color: var(--background);
 		border: 1px;
 		border-radius: 1rem;
 		max-width: 28rem;
@@ -130,18 +129,22 @@
 	}
 
 	input {
+		margin-top: 0.25rem;
 		font-size: var(--big-font);
 		line-height: 1.25rem;
 		padding-top: 0.5rem;
 		padding-bottom: 0.5rem;
 		padding-left: 0.75rem;
 		padding-bottom: 0.75rem;
-		border-color: rgb(209, 213, 219);
+		outline: none;
+		border: none;
+		color: var(--text-color-1);
+		border: solid var(--accents-2);
 		border-width: 1px;
-		border-radius: 0.375rem;
+		background: var(--system-grey);
 		width: 100%;
 		display: block;
-		margin-top: 0.25rem;
+		border-radius: 0.375rem;
 	}
 
 	button {
@@ -151,11 +154,11 @@
 		transition-property: all;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 0.15s;
-		color: white;
+		color: var(--accents-7);
 		font-size: var(--big-font);
 		line-height: 1.25rem;
-		background-color: black;
-		border-color: black;
+		background-color: var(--accents-2);
+		border-color: transparent;
 		border-width: 1px;
 		border-radius: 0.375rem;
 		cursor: pointer;
@@ -166,8 +169,8 @@
 	}
 
 	button:hover {
-		color: black;
-		background-color: rgb(250, 250, 237);
+		color: var(--background);
+		background-color: var(--accents-7);
 	}
 
 	.text {
@@ -179,7 +182,7 @@
 	}
 
 	.text a {
-		color: black;
+		color: var(--text-color-1);
 		text-decoration: inherit;
 		font-weight: 600;
 		text-align: center;
@@ -189,7 +192,7 @@
 		padding-top: 1rem;
 		font-size: var(--medium-font);
 		line-height: 1.25rem;
-		color: red;
+		color: var(--error-red);
 		text-align: center;
 	}
 

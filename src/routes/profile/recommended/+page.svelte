@@ -37,6 +37,6 @@
     .no-recommended-movies a {
         text-decoration: none;
         font-weight: 800;
-        color: black;
+        color: var(--foreground);
     }
 </style>

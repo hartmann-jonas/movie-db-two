@@ -81,6 +81,7 @@
 		<img
 			src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.backdrop_path}
 			alt={data.props.movieDetail.title}
+			draggable="false"
 		/>
 		{/if}
 	</div>
@@ -156,7 +157,7 @@
 				<span>Production Company:</span>
 				{#if typeof data.props.movieDetail.production_companies[0].logo_path == 'string'}
 				<br />
-				<a href={'https://www.themoviedb.org/company/' +  data.props.movieDetail.production_companies[0].id}><img class="company-logo" src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.production_companies[0].logo_path} alt={data.props.movieDetail.production_companies[0].name}></a><br />
+				<a href={'https://www.themoviedb.org/company/' +  data.props.movieDetail.production_companies[0].id}><img class="company-logo" src={'https://image.tmdb.org/t/p/original' + data.props.movieDetail.production_companies[0].logo_path} alt={data.props.movieDetail.production_companies[0].name} draggable="false"></a><br />
 				{:else}
 				{data.props.movieDetail.production_companies[0].name}<br />
 				{/if}
@@ -272,11 +273,16 @@
 
 	hr {
 		margin: 25px 0px 20px;
-		color: black;
-		border: .5px solid black;
+		color: var(--accents-2);
+		border: .5px solid var(--accents-2);
+	}
+
+	.movie-txt {
+		color: var(--accents-7)
 	}
 
 	.title {
+		color: var(--foreground);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -284,16 +290,16 @@
 	}
 
 	.interactions-alternative {
-		background-color: black;
-		color: white;
+		background-color: var(--background);
+		color: var(--accents-6);
 		text-decoration: none;
 		padding: 5px;
 		border-radius: .4rem;
+		border: solid var(--accents-2) 1px;
 	}
 
 	.interactions-alternative:hover {
-		background-color: rgb(226, 226, 203);
-		color: black;
+		color: var(--foreground);
 	}
 
 	.user-interactions {
@@ -334,10 +340,10 @@
 
 	.unliked button {
 		display: flex;
-		color: white;
-		background-color: black;
-		border: none;
-		border-right: solid rgb(30, 30, 30) 1px;
+		color: var(--foreground);
+		background-color: var(--background);
+		border: solid var(--accents-2) 1px;
+		border-right: none;
 		border-top-left-radius: 50%;
 		border-bottom-left-radius: 50%;
 		width: 40px;
@@ -350,8 +356,8 @@
 		display: flex;
 		color: red;
 		background-color: black;
-		border: none;
-		border-right: solid rgb(30, 30, 30) 1px;
+		border: solid var(--accents-2) 1px;
+		border-right: none;
 		border-top-left-radius: 50%;
 		border-bottom-left-radius: 50%;
 		width: 40px;
@@ -377,7 +383,8 @@
 		display: flex;
 		color: white;
 		background-color: black;
-		border: none;
+		border: solid var(--accents-2) 1px;
+		border-left: none;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;
 		width: 40px;
@@ -389,8 +396,9 @@
 	.saved button {
 		display: flex;
 		color: gold;
-		background-color: black;
-		border: none;
+		background-color: var(--background);
+		border: solid 1px var(--accents-2);
+		border-left: none;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;
 		width: 40px;
@@ -413,6 +421,7 @@
 	}
 
 	.movie-details {
+		color: var(--accents-7);
 		margin: 2rem auto;
 		max-width: 80%;
 	}
@@ -446,7 +455,7 @@
 		width: 50px;
 		border-radius: 20%;
 		margin: 5px;
-		box-shadow: 0px 0px 5px darkgray;
+		box-shadow: 0px 0px 5px var(--accents-1);
 	}
 
 	.selText {
@@ -466,12 +475,23 @@
 		}
 	}
 
-	select {
-		border: 0;
-		border-radius: 5px;
+	.selCountry {
+		background-color: var(--background);
+		border: solid var(--accents-2) 1px;
+		border-radius: .5rem;
 		padding: 5px;
-		font-size: 14px;
-		background-color: rgb(225, 225, 204);
+		display: flex;
+		gap: 15px;
+	}
+
+	select {
+		border: none;
+		font-size: inherit;
+		color: inherit;
+		background-color: inherit;
+		font-weight: bold;
+		text-align: right;
+		-webkit-appearance: none;
 	}
 
 	.movie-videos {
@@ -504,7 +524,7 @@
 		border-top-right-radius: .5rem;
 		border-bottom-left-radius: .5rem;
 		border-bottom-right-radius: .5rem;
-		box-shadow: 0px 0px 5px darkgray;
+		box-shadow: 0px 0px 5px var(--accents-1);
 	}
 
 	.video-text {
@@ -544,6 +564,25 @@
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		-ms-overflow-style: -ms-autohiding-scrollbar;
+	}
+
+	.movies::-webkit-scrollbar, .videos::-webkit-scrollbar {
+		width: 12px;
+	}
+
+	.movies::-webkit-scrollbar-track, .videos::-webkit-scrollbar-track {
+		border-radius: 10px;
+  		padding: 2px 0;
+  		background-color: var(--background);
+		border: 1px solid var(--accents-2)
+	}
+
+	.movies::-webkit-scrollbar-thumb, .videos::-webkit-scrollbar-thumb {
+  		border-radius: 10px;
+		height: 2px;
+		box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  		background-color: var(--accents-1);
+  		border: 1px solid var(--accents-2);
 	}
 
 	.movie-cards {

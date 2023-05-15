@@ -31,11 +31,18 @@
 	.profile {
 		text-align: left;
 		width: 25%;
+		color: var(--accents-5);
+		transition: all 100ms ease;
+	}
+
+	.profile:hover {
+		color: var(--foreground);
 	}
 
 	.title {
 		text-align: center;
 		width: 50%;
+		color: var(--foreground)
 	}
 
 	.logout {
@@ -44,10 +51,16 @@
 	}
 
 	.nav {
-		width: 100%;
+		position: sticky;
+		top: 0;
+		padding: 15px;
 		display: flex;
 		min-height: 10vh;
 		align-items: center;
+		background-color: var(--background-transparent);
+		backdrop-filter: blur(15px);
+		-webkit-backdrop-filter: blur(15px);
+		border-bottom: 1.5px var(--accents-2) solid;
 	}
 	
 	#unlogged {
@@ -56,12 +69,20 @@
 
 	#logged {
 		justify-content: space-between;
+		padding-left: 6vw;
+		padding-right: 6vw;
 	}
 
 	/*Positioning of the right items in the navbar*/
 	.login {
 		position: absolute;
 		right: 6%;
+		color: var(--accents-5);
+		transition: all 100ms ease;
+	}
+
+	.login:hover {
+		color: var(--foreground)
 	}
 
 	button {
@@ -71,14 +92,18 @@
 		padding: 2.5px;
 		background: none;
 		border: none;
-		color: black;
+		color: var(--accents-5);
+		transition: all 100ms ease;
+	}
+
+	button:hover {
+		color: var(--foreground)
 	}
 
 	a {
 		font-size: 1rem;
 		font-weight: bold;
 		font-family: 'Poppins';
-		color: black;
 		text-decoration: none;
 		padding: 5px;
 	}
