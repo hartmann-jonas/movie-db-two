@@ -8,8 +8,8 @@ import 'dotenv/config'
 export const load: PageServerLoad = async ({ params, locals }) => {
     const startTime = Date.now()
     let likes = 0;
-    let liked = undefined;
-    let favorited = undefined;
+    let liked = false;
+    let favorited = false;
     const { id } = params;
     const movieId = Number(id);
     const apiKey = process.env.TMDB_API_KEY;
@@ -68,6 +68,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         }
         const endTime = Date.now()
         console.log('Time for fetching data: ' + (endTime - startTime) + 'ms')
+        console.log(movieDetail.genres)
         return {
             props: {
                 favorited,
@@ -196,6 +197,7 @@ export const actions: Actions = {
         if (locals.user.id) {
             const movieId = Number(params.id)
             const userId = locals.user.id
+            console.log(locals)
             let movie = undefined
             let genres = undefined
             const response = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`)

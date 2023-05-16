@@ -9,7 +9,7 @@
 	import heart from 'svelte-awesome/icons/heart';
 	import heartO from 'svelte-awesome/icons/heartO';
 	import { enhance } from '$app/forms';
-	import https from 'https'
+	import Skeleton from 'svelte-skeleton-loader/';
 
 	export let data: PageServerData;
 
@@ -34,7 +34,6 @@
 	async function getLocation() {
 		const resp = await fetch(`https://ipapi.co/json/`)
 		const json = await resp.json()
-		console.log(json)
 		console.log(json.country_code, json.country_name, json.city)
 		switch (json.country_code) {
 			case 'SE':
@@ -71,11 +70,16 @@
 	let scale = 1.25;
 </script>
 
+<svelte:head>
+	<title>{data.props.movieDetail.title} - Movie DB Two</title>
+</svelte:head>
+
 <section
 	class="movie-details"
 	in:fly={{ y: 50, duration: 500, delay: 500 }}
 	out:fly={{ y: 50, duration: 400 }}
 >
+{#if data.props}
 	<div class="img-container">
 		{#if typeof data.props.movieDetail.backdrop_path == 'string'}
 		<img
@@ -255,6 +259,12 @@
 			</div>
 		</div>
 		{/if}
+	</div>
+{:else}
+	<h1>Page Loading...</h1>
+	<!-- <Skeleton class="img-container" />
+	<Skeleton class="movie-details" /> -->
+{/if}
 </section>
 
 <style>
@@ -510,6 +520,7 @@
 		flex-wrap: nowrap;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
+		-webkit-mask: linear-gradient(90deg, #0000, #000 10% 80%, #0000);
 		-ms-overflow-style: -ms-autohiding-scrollbar; 
 	}
 
@@ -563,10 +574,12 @@
 		flex-wrap: nowrap;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
+		-webkit-mask: linear-gradient(90deg, #0000, #000 10% 80%, #0000);
 		-ms-overflow-style: -ms-autohiding-scrollbar;
 	}
 
 	.movies::-webkit-scrollbar, .videos::-webkit-scrollbar {
+		transform: translateZ(0);
 		width: 12px;
 	}
 
@@ -580,7 +593,8 @@
 	.movies::-webkit-scrollbar-thumb, .videos::-webkit-scrollbar-thumb {
   		border-radius: 10px;
 		height: 2px;
-		box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+		/* box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
+		transform: translateZ(0);
   		background-color: var(--accents-1);
   		border: 1px solid var(--accents-2);
 	}
