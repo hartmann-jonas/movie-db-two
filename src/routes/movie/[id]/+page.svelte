@@ -65,7 +65,15 @@
 	$: details = data.props.movieAvailability.results[selected?.code]
 	let limitedVideos = data.props.movieDetail.videos.results.slice(0, 5)
 	let recommendedMovies = data.props.movieDetail.recommendations.results.slice(0, 10)
+	const genres = data.props.movieDetail.genres
+	const genresString = JSON.stringify(genres)
 
+	function setLike() {
+		data.props.liked = true
+	}
+	function unsetLike() {
+		data.props.liked = false
+	}
 	// scale for icons
 	let scale = 1.25;
 </script>
@@ -103,6 +111,7 @@
 					{#if !data.props.liked}
 					<form use:enhance class="unliked" action="?/likeMovie" method="post">
 						<button type="submit"><Icon data={heartO} {scale}/></button>
+						<input type="hidden" name="genres" value={genresString}>
 					</form>
 					{:else}
 					<form use:enhance class="liked" action="?/unlikeMovie" method="post">

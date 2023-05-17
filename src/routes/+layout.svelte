@@ -12,7 +12,7 @@
 	<title>Movie DB Two</title>
 	<meta name="og:title" content="MovieDB"/>
 	<meta name="description" content="Movie DB Two let's you find and save your favourite movies. You can find out where a movie is available and watch behind the scenes.">
-	<meta name="theme-color" content="var(--theme-color)">
+	<meta name="theme-color" content="#000">
 </svelte:head>
 <div class="content">
 	<Nav />

@@ -192,22 +192,19 @@ export const actions: Actions = {
     },
 
     // add movie to liked movies of given user
-    likeMovie: async ({ locals, params }) => {
+    likeMovie: async ({ locals, params, request }) => {
         console.log("LIKING MOVIE")
+        const data = await request.formData()
+        const genresString = data.get('genres')
+        const genres = JSON.parse(genresString)
         if (locals.user.id) {
             const movieId = Number(params.id)
             const userId = locals.user.id
             console.log(locals)
-            let movie = undefined
-            let genres = undefined
-            const response = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`)
-            if (response.ok) {
-                movie = await response.json()
-                genres = await movie.genres
-            }
             console.log('Movie ID:  ' + movieId)
             console.log('User:  ' + userId)
             // link all the genres to the movie
+            const start = Date.now()
             for await (const genre of genres) {
                 console.log('Genre: ' + genre.name)
                 try {
@@ -258,6 +255,8 @@ export const actions: Actions = {
                     return fail(400, { error: 'liking the keywords failed' })
                 }
             }
+            const time = Date.now() - start
+            console.log('TIME FOR DATABASE OPERATIONS: ' + time + 'ms')
         } else {
             throw error(400, "no user id found")
         }
