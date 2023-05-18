@@ -3,6 +3,7 @@ import type { Action, Actions } from './$types';
 import { database } from '$lib/database';
 import { error, fail } from '@sveltejs/kit'
 
+import CryptoJS from 'crypto-js'
 import 'dotenv/config'
 
 export const load: PageServerLoad = async ({ params, locals }) => {
@@ -193,10 +194,43 @@ export const actions: Actions = {
 
     // add movie to liked movies of given user
     likeMovie: async ({ locals, params, request }) => {
+        type Genre = {
+            id: number,
+            name: string,
+        }
+
+        function validateData(data: unknown): data is Genre[] {
+            // data is not an array
+            if (!Array.isArray(data)) {
+                return false
+            }
+            for (const item of data) {
+                // item (genre) is not an object
+                if (typeof item !== 'object' || Array.isArray(item) || item === null) {
+                    return false
+                }
+                // item (genre) does not have an id or id is not a number
+                if (!('id' in item) || typeof item.id !== 'number') {
+                    return false
+                }
+                // item (genre) does not have a name or name is not a string
+                if (!('name' in item) || typeof item.name !== 'string') {
+                    return false
+                }
+            }
+            return true
+        }
         console.log("LIKING MOVIE")
         const data = await request.formData()
-        const genresString = data.get('genres')
-        const genres = JSON.parse(genresString)
+        const encryptedGenres = data.get('genres')
+        const bytes = CryptoJS.AES.decrypt(encryptedGenres, 'secret key 123')
+        const genres = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+        if (validateData(genres) == false) {
+            throw error(400, 'submitted data is not valid')
+        }
+
+        console.log("DECRYPTED:")
+        console.log(genres)
         if (locals.user.id) {
             const movieId = Number(params.id)
             const userId = locals.user.id
