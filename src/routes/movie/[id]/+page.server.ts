@@ -223,7 +223,7 @@ export const actions: Actions = {
         console.log("LIKING MOVIE")
         const data = await request.formData()
         const encryptedGenres = data.get('genres')
-        const bytes = CryptoJS.AES.decrypt(encryptedGenres, 'secret key 123')
+        const bytes = CryptoJS.AES.decrypt(encryptedGenres, process.env.CRYPRO_SECRET_KEY)
         const genres = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
         if (validateData(genres) == false) {
             throw error(400, 'submitted data is not valid')

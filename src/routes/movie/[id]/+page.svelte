@@ -11,13 +11,14 @@
 	import { enhance } from '$app/forms';
 	import Skeleton from 'svelte-skeleton-loader/';
 	import CryptoJS from 'crypto-js'
+	import 'dotenv/config'
 
 
 	export let data: PageServerData;
 
 	const genres = data.props.movieDetail.genres
 	const genresString = JSON.stringify(genres)
-	const encryptedGenres = CryptoJS.AES.encrypt(genresString, 'secret key 123').toString()
+	const encryptedGenres = CryptoJS.AES.encrypt(genresString, process.env.CRYPRO_SECRET_KEY).toString()
 	console.log("ENCRYPTED:")
 	console.log(encryptedGenres)
 
