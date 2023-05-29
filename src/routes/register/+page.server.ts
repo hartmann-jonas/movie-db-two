@@ -2,7 +2,7 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import * as bcrypt from 'bcrypt'
 
-import {database} from '$lib/database'
+import { database } from '$lib/database'
 
 enum Roles {
     ADMIN = 'ADMIN',
