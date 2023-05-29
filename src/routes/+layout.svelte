@@ -12,6 +12,7 @@
 	<title>Movie DB Two</title>
 	<meta name="og:title" content="MovieDB"/>
 	<meta name="description" content="Movie DB Two let's you find and save your favourite movies. You can find out where a movie is available and watch behind the scenes.">
+	<meta name="theme-color" content="#000">
 </svelte:head>
 <div class="content">
 	<Nav />
@@ -25,6 +26,49 @@
 </div>
 
 <style>
+	:root {
+		--theme-color: #000;
+		--theme-color: #fff;
+
+		/* COLOR PALETTE 1 */
+		--color-1-1: #0D1B2A;
+		--color-1-2: #1B263B;
+		--color-1-3: #415A77;
+		--color-1-4: #778DA9;
+		--color-1-5: #E0E1DD;
+
+		/* VERCEL WEBSITE COLORSCHEME */
+		--foreground: #fff;
+		--background: #000;
+		--background-transparent: #000000d0;
+		--accents-1: #111;
+		--accents-2: #333;
+		--accents-3: #444;
+		--accents-4: #666;
+		--accents-5: #888;
+		--accents-6: #999;
+		--accents-7: #eaeaea;
+		--accents-8: #fafafa;
+
+		/* GENERAL COLORS */
+		--error-red: rgb(180, 0, 0);
+	}
+
+	@media (prefers-color-scheme: light) {
+		:root {
+			--foreground: #000;
+			--background: #fff;
+			--background-transparent: #ffffffd0;
+			--accents-1: #eee;
+			--accents-2: #ddd;
+			--accents-3: #ccc;
+			--accents-4: #bbb;
+			--accents-5: #aaa;
+			--accents-6: #999;
+			--accents-7: #2e2e2e;
+			--accents-8: #0a0a0a;
+		}
+	}
 	.content {
 		display: flex;
 		flex-direction: column;

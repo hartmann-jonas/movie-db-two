@@ -60,7 +60,7 @@
 		font-weight: bold;
 		font-size: 1.5rem;
 		font-family: 'Poppins';
-		color: black;
+		color: var(--accents-7);
 		text-decoration: none;
 	}
 </style>
