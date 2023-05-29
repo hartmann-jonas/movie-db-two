@@ -17,10 +17,15 @@ generator client {
 //  url = env("DEVELOPMENT_POSTGRES")
 //}
 
+//datasource db {
+//  provider = "postgresql"
+//  url  	= env("DATABASE_URL")
+//  directUrl = env("DIRECT_URL")
+//}
+
 datasource db {
   provider = "postgresql"
-  url  	= env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url = env("RENDER_DATABASE_URL")
 }
 
 //Create table User

@@ -91,7 +91,7 @@
 			<h1>{data.props.movieDetail.title}</h1>
 			<div class="user-interactions">
 				{#await data.props.streamed.likes}
-					<p>Loading...</p>
+					<Skeleton />
 				{:then value}
 					{#if value == 1}
 						<p class="text-small">{value} like</p>
