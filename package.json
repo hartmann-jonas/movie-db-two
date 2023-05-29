@@ -41,7 +41,6 @@
 		"crypto-js": "^4.1.1",
 		"dotenv": "^16.0.3",
 		"prisma": "^4.10.0",
-		"svelte-awesome": "^3.0.1",
-		"svelte-skeleton-loader": "^0.1.4"
+		"svelte-awesome": "^3.0.1"
 	}
 }
