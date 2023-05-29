@@ -9,7 +9,6 @@
 	import heart from 'svelte-awesome/icons/heart';
 	import heartO from 'svelte-awesome/icons/heartO';
 	import { enhance } from '$app/forms';
-	import Skeleton from 'svelte-skeleton-loader';
 
 	export let data: PageServerData;
 
@@ -91,7 +90,7 @@
 			<h1>{data.props.movieDetail.title}</h1>
 			<div class="user-interactions">
 				{#await data.props.streamed.likes}
-					<Skeleton />
+					<div class="likes-skeleton" />
 				{:then value}
 					{#if value == 1}
 						<p class="text-small">{value} like</p>
@@ -100,15 +99,15 @@
 					{/if}
 				{/await}
 				{#await data.props.streamed.userInteractions}
-					{#if $page.data.user}	
-					<div class="interactions">
-						<div class="unliked">
-							<button><Icon data={heartO} {scale} /></button>
+					{#if $page.data.user}
+						<div class="interactions">
+							<div class="unliked">
+								<button><Icon data={heartO} {scale} /></button>
+							</div>
+							<div class="unsaved">
+								<button><Icon data={bookmarkO} {scale} /></button>
+							</div>
 						</div>
-						<div class="unsaved">
-							<button><Icon data={bookmarkO} {scale} /></button>
-						</div>
-					</div>
 					{:else}
 						<a class="interactions-alternative" href="/login">Login to like</a>
 					{/if}
@@ -344,6 +343,24 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem 0rem 2rem;
+	}
+
+	.likes-skeleton {
+		width: 60px;
+		height: 20px;
+		border-radius: 0.5rem;
+		/* background-color: var(--foreground); */
+		cursor: progress;
+		background: linear-gradient(75deg, var(--foreground), var(--accents-7), var(--foreground));
+		background-repeat: repeat;
+		background-position-x: -60px;
+		animation: loading 1.5s infinite;
+	}
+
+	@keyframes loading {
+		to {
+			background-position: 60px 0, 0 0, 0 60px, 50px 60px;
+		}
 	}
 
 	.interactions-alternative {
