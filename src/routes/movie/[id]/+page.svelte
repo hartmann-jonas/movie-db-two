@@ -2,7 +2,6 @@
 	import { fly } from 'svelte/transition';
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
-	import MovieCard from '../../../components/MovieCard.svelte';
 	import Icon from 'svelte-awesome';
 	import bookmark from 'svelte-awesome/icons/bookmark';
 	import bookmarkO from 'svelte-awesome/icons/bookmarkO';
@@ -314,17 +313,14 @@
 </section>
 
 <style>
-	.img-container img {
-		width: 100%;
-		border-radius: 0.5rem;
+	/* UNIVERSAL STYLES */
+	p {
+		padding: 1rem 0rem;
 	}
 
 	.text-small {
 		font-size: 1rem;
-	}
-
-	p {
-		padding: 1rem 0rem;
+		padding: 0;
 	}
 
 	hr {
@@ -333,47 +329,28 @@
 		border: 0.5px solid var(--accents-2);
 	}
 
-	.movie-txt {
+	.movie-details {
 		color: var(--accents-7);
+		margin: 2rem auto;
+		max-width: 80%;
 	}
 
+	@media (max-width: 400px) {
+		.movie-details {
+			margin: 1.5rem auto;
+		}
+	}
+
+	.img-container img {
+		width: 100%;
+		border-radius: 0.5rem;
+	}
 	.title {
 		color: var(--foreground);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem 0rem 2rem;
-	}
-
-	.likes-skeleton {
-		width: 60px;
-		height: 20px;
-		border-radius: 0.5rem;
-		/* background-color: var(--foreground); */
-		cursor: progress;
-		background: linear-gradient(75deg, var(--foreground), var(--accents-7), var(--foreground));
-		background-repeat: repeat;
-		background-position-x: -60px;
-		animation: loading 1.5s infinite;
-	}
-
-	@keyframes loading {
-		to {
-			background-position: 60px 0, 0 0, 0 60px, 50px 60px;
-		}
-	}
-
-	.interactions-alternative {
-		background-color: var(--background);
-		color: var(--accents-6);
-		text-decoration: none;
-		padding: 5px;
-		border-radius: 0.4rem;
-		border: solid var(--accents-2) 1px;
-	}
-
-	.interactions-alternative:hover {
-		color: var(--foreground);
 	}
 
 	.user-interactions {
@@ -400,11 +377,25 @@
 		.text-small {
 			font-size: 0.8rem;
 		}
+	}
 
-		.interactions-alternative {
-			font-size: 0.9rem;
-			overflow: hidden;
-			white-space: nowrap;
+	.likes-skeleton {
+		position: absolute;
+		width: 60px;
+		height: 1rem;
+		border-radius: 0.25rem;
+		padding: 0;
+		/* background-color: var(--foreground); */
+		cursor: progress;
+		background: linear-gradient(75deg, var(--foreground), var(--accents-7), var(--foreground));
+		background-repeat: repeat;
+		background-position-x: -60px;
+		animation: loading 1.5s infinite;
+	}
+
+	@keyframes loading {
+		to {
+			background-position: 60px 0, 0 0, 0 60px, 50px 60px;
 		}
 	}
 
@@ -412,18 +403,25 @@
 		display: flex;
 	}
 
-	.unliked button {
-		display: flex;
-		color: var(--foreground);
+	.interactions-alternative {
 		background-color: var(--background);
+		color: var(--accents-6);
+		text-decoration: none;
+		padding: 5px;
+		border-radius: 0.4rem;
 		border: solid var(--accents-2) 1px;
-		border-right: none;
-		border-top-left-radius: 50%;
-		border-bottom-left-radius: 50%;
-		width: 40px;
-		height: 40px;
-		justify-content: center;
-		align-items: center;
+	}
+	
+	.interactions-alternative:hover {
+		color: var(--foreground);
+	}
+
+	@media (max-width: 570px) {
+		.interactions-alternative {
+			font-size: 0.9rem;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 	}
 
 	.liked button {
@@ -440,15 +438,50 @@
 		align-items: center;
 	}
 
-	.unliked button:hover {
+	.liked button:hover {
 		transition: 0.25s;
+		color: black;
 		background-color: red;
 		cursor: pointer;
 	}
 
-	.liked button:hover {
+	.saved button {
+		display: flex;
+		color: gold;
+		background-color: var(--background);
+		border: solid 1px var(--accents-2);
+		border-left: none;
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;
+		width: 40px;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.saved button:hover {
 		transition: 0.25s;
 		color: black;
+		background-color: goldenrod;
+		cursor: pointer;
+	}
+
+	.unliked button {
+		display: flex;
+		color: var(--foreground);
+		background-color: var(--background);
+		border: solid var(--accents-2) 1px;
+		border-right: none;
+		border-top-left-radius: 50%;
+		border-bottom-left-radius: 50%;
+		width: 40px;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.unliked button:hover {
+		transition: 0.25s;
 		background-color: red;
 		cursor: pointer;
 	}
@@ -467,43 +500,14 @@
 		align-items: center;
 	}
 
-	.saved button {
-		display: flex;
-		color: gold;
-		background-color: var(--background);
-		border: solid 1px var(--accents-2);
-		border-left: none;
-		border-top-right-radius: 50%;
-		border-bottom-right-radius: 50%;
-		width: 40px;
-		height: 40px;
-		justify-content: center;
-		align-items: center;
-	}
-
 	.unsaved button:hover {
 		transition: 0.25s;
 		background-color: goldenrod;
 		cursor: pointer;
 	}
 
-	.saved button:hover {
-		transition: 0.25s;
-		color: black;
-		background-color: goldenrod;
-		cursor: pointer;
-	}
-
-	.movie-details {
+	.movie-txt {
 		color: var(--accents-7);
-		margin: 2rem auto;
-		max-width: 80%;
-	}
-
-	@media (max-width: 400px) {
-		.movie-details {
-			margin: 1.5rem auto;
-		}
 	}
 
 	span {
