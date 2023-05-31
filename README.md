@@ -1,21 +1,29 @@
-# MovieDB
+# 🍿 MovieDB
 
-A movie database, powered by [`Svelte`](https://svelte.dev) and the [`TMDB-API`](https://developers.themoviedb.org/3).
+This is a movie website built with SvelteKit, TypeScript, Prisma, and Neon PostgresDB.  
+The website allows users to browse, search for, and save their favorite movies. It provides movie details, ratings, trailers, and personalized recommendations.
 
-New functionalities are being added along the way.
+## Features 
 
-## Features
+- Browse and search movies
+- Movie details with plot, rating, release date and more
+- User registration and login
+- User profiles with saved movies
+- Favorite movies functionality
+- Personalized movie recommendations
+- Responsive design for different devices
 
-Those functionalities are implemented on the website!
- - Search a movie by the name
- - See where a movie is available in different countries
- - Hosted PostgreSQL database, connected using [`Prisma`](https://prisma.io)
- - Register and login
- - Save movies on your profile
- - Individual recommendations based on movies you liked (Experimental)
+## Technologies Used
 
-<br/>
+- Front-end: SvelteKit (TypeScript)
+- Back-end: Prisma
+- Database: PostgresDB
+- Web-service: Cloudflare Turnstile, TheMovieDB API
 
-<!--
-### The website is hosted using [`Vercel`](https://vercel.com).
--->
+## Deployment
+
+The website is hosted on [Vercel](https://vercel.com) and the database on [Neon](https://neon.tech).
+
+## License 🔑
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
