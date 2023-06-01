@@ -309,6 +309,23 @@
 				</div>
 			</div>
 		{/if}
+		<hr />
+		<div class="comments">
+			<h4>Comments:</h4>
+			{#if $page.data.user}
+				<form class="write-comment" action="?/writeComment" method="post" use:enhance>
+					<input type="text" name="comment" id="comment" placeholder="Write a comment!" />
+					<button type="submit">Submit</button>
+				</form>
+			{/if}
+			{#await data.props.streamed.comments}
+				<p>Recieving comments...</p>
+			{:then comments}
+				{#each comments as comment}
+					<p class="comment">{comment.user[0].username} wrote: <br /> {comment.comment}</p>
+				{/each}
+			{/await}
+		</div>
 	</div>
 </section>
 
@@ -411,7 +428,7 @@
 		border-radius: 0.4rem;
 		border: solid var(--accents-2) 1px;
 	}
-	
+
 	.interactions-alternative:hover {
 		color: var(--foreground);
 	}
@@ -699,5 +716,46 @@
 		font-family: 'Poppins';
 		color: black;
 		text-decoration: none;
+	}
+
+	.write-comment {
+		margin: auto;
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 3rem;
+		margin-top: 2rem;
+	}
+
+	.write-comment input {
+		width: 100%;
+		border-top-left-radius: 0.25rem;
+		border-bottom-left-radius: 0.25rem;
+		outline: none;
+		border: 1px solid var(--accents-3);
+		border-right: none;
+		background-color: var(--accents-1);
+		color: var(--foreground);
+		padding-left: 8px;
+	}
+	.write-comment button {
+		width: 10rem;
+		height: 2rem;
+		border-top-right-radius: 0.25rem;
+		border-bottom-right-radius: 0.25rem;
+		background-color: var(--accents-2);
+		border: 1px solid var(--accents-3);
+		color: var(--foreground);
+		cursor: pointer;
+	}
+
+	.write-comment button:hover {
+		background-color: var(--accents-3);
+	}
+
+	.comment {
+		background-color: var(--accents-2);
+		margin-bottom: 1rem;
+		border-radius: 0.25rem;
+		padding: 15px;
 	}
 </style>
