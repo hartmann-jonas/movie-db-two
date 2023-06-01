@@ -42,6 +42,7 @@ model User {
   roleId          Int
   favorite_movies Movie[] @relation("Favourites")
   liked_movies    Movie[] @relation("Likes")
+  comments     Comments[]
 }
 
 //Create table Roles
@@ -58,10 +59,19 @@ model Movie {
   favorited_by User[]     @relation("Favourites")
   likes        User[]     @relation("Likes")
   genres     Genres[]
+  comments Comments[]
 }
 
 model Genres {
   id      Int     @id @unique @default(autoincrement())
   genre   String
   movie   Movie[]
+}
+
+model Comments {
+  id        Int       @id @unique @default(autoincrement())
+  comment   String
+  user      User[]
+  movie     Movie[]
+  createdAt DateTime  @default(now())
 }

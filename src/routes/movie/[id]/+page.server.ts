@@ -88,6 +88,34 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                             fulfil(0)
                         }
                     }),
+                    // TODO: make one big movieData to get likes and comments from db at the same time
+                    comments: new Promise(async (fulfil) => {
+                        let comments = []
+                        // search comments for movie in db
+                        const commentsResult = await database.movie.findFirst({
+                            where: {
+                                id: movieId
+                            },
+                            select: {
+                                comments: {
+                                    select: {
+                                        user: true,
+                                        comment: true
+                                    }
+                                }
+                            }
+                        })
+                        if (commentsResult) {
+                            comments = commentsResult.comments
+                            console.log("Found comments")
+                            // make comments go from new to old
+                            comments = comments.reverse()
+                            fulfil(comments)
+                        } else if (commentsResult == null) {
+                            console.log('Movie has no comments');
+                            fulfil(0)
+                        }
+                    })
                 }
             }
         };
@@ -306,6 +334,51 @@ export const actions: Actions = {
                 return fail(400, { error: 'liking the movie failed' })
             }
         } else {
+            throw error(400, 'no user id found')
+        }
+    },
+
+    writeComment: async ({ locals, params, request }) => {
+        console.log('writing comment')
+        if (locals.user.id) {
+            const form = await request.formData()
+            const comment = form.get('comment')?.toString()
+            if (!comment) {
+                return fail(400, { error: 'missing comment' })
+            } else {
+                const movieId = Number(params.id)
+                const userId = locals.user.id
+                console.log('Movie ID:  ' + movieId)
+                console.log('User:  ' + userId)
+                console.log('Comment: ' + comment)
+                try {
+                    await database.comments.create({
+                        data: {
+                            comment: comment,
+                            user: {
+                                connect: {
+                                    id: userId
+                                }
+                            },
+                            movie: {
+                                connectOrCreate: {
+                                    where: {
+                                        id: movieId
+                                    },
+                                    create: {
+                                        id: movieId
+                                    }
+                                }
+                            },
+                        }
+                    })
+                } catch (e) {
+                    console.log(e)
+                    return fail(400, { error: 'submitting the comment failed' })
+                }
+            }
+        } else {
+            console.log('no user logged in')
             throw error(400, 'no user id found')
         }
     }
