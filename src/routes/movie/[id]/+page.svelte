@@ -321,9 +321,19 @@
 			{#await data.props.streamed.comments}
 				<p>Recieving comments...</p>
 			{:then comments}
-				{#each comments as comment}
-					<p class="comment">{comment.user[0].username} wrote: <br /> {comment.comment}</p>
-				{/each}
+				{#if comments != null}
+					{#each comments as comment}
+						<div class="comment">
+							<div class="comment-head">
+								<span class="comment-user">{comment.user[0].username}</span>
+								<span class="comment-date">{comment.createdAt.toLocaleDateString('us-EN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+							</div>
+							<p class="comment-text">{comment.comment}</p>
+						</div>
+					{/each}
+				{:else}
+					<p>No comments.</p>
+				{/if}
 			{/await}
 		</div>
 	</div>
@@ -733,16 +743,19 @@
 		outline: none;
 		border: 1px solid var(--accents-3);
 		border-right: none;
-		background-color: var(--accents-1);
+		background-color: var(--background);
 		color: var(--foreground);
-		padding-left: 8px;
+		padding-left: 9px;
+		font-size: 14px;
 	}
 	.write-comment button {
 		width: 10rem;
-		height: 2rem;
+		height: 2.5rem;
 		border-top-right-radius: 0.25rem;
 		border-bottom-right-radius: 0.25rem;
-		background-color: var(--accents-2);
+		background-color: var(--accents-1);
+		font-size: 14px;
+		font-weight: bold;
 		border: 1px solid var(--accents-3);
 		color: var(--foreground);
 		cursor: pointer;
@@ -753,9 +766,20 @@
 	}
 
 	.comment {
-		background-color: var(--accents-2);
+		margin-top: 1.25rem;
+		background-color: var(--background);
 		margin-bottom: 1rem;
 		border-radius: 0.25rem;
 		padding: 15px;
 	}
+
+	.comment-head {
+		display: flex;
+		gap: 5vw;
+	}
+
+	.comment-head span {
+		font-weight: 500;
+	}
+
 </style>

@@ -98,9 +98,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                             },
                             select: {
                                 comments: {
-                                    select: {
-                                        user: true,
-                                        comment: true
+                                    include: {
+                                        user: true
                                     }
                                 }
                             }
@@ -339,11 +338,12 @@ export const actions: Actions = {
     },
 
     writeComment: async ({ locals, params, request }) => {
-        console.log('writing comment')
+        console.log('Writing comment')
         if (locals.user.id) {
             const form = await request.formData()
             const comment = form.get('comment')?.toString()
-            if (!comment) {
+            if (!comment || comment.match(/^[!@#$%^&*()\[\]{};':"\\|,.<>\/?\s]*$/)) {
+                console.log('missing comment')
                 return fail(400, { error: 'missing comment' })
             } else {
                 const movieId = Number(params.id)
