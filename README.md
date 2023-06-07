@@ -1,4 +1,8 @@
 # 🍿 MovieDB
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hartmann-jonas/movie-db-two)
+![GitHub last commit](https://img.shields.io/github/last-commit/hartmann-jonas/movie-db-two)
+![GitHub contributors](https://img.shields.io/github/contributors/hartmann-jonas/movie-db-two)
+![GitHub](https://img.shields.io/github/license/hartmann-jonas/movie-db-two)
 
 This is a movie website built with SvelteKit, TypeScript, Prisma, and Neon PostgresDB.  
 The website allows users to browse, search for, and save their favorite movies. It provides movie details, ratings, trailers, and personalized recommendations.
