@@ -4,7 +4,6 @@
 	import Icon from 'svelte-awesome';
 	import spinner from 'svelte-awesome/icons/spinner';
 	import { fly } from 'svelte/transition';
-	import { Turnstile } from 'svelte-turnstile';
 
 	export let form: ActionData;
 
@@ -48,8 +47,7 @@
 					</div>
 					<div class="turnstile">
 						<div class="cf-turnstile" data-sitekey="0x4AAAAAAAEggr1Gpnt5Fmzp"></div>
-<!-- 						<Turnstile siteKey="0x4AAAAAAAEggr1Gpnt5Fmzp" theme="light" />
- -->				</div>
+ 					</div>
 
 					{#if form?.invalid}
 						<p class="error">Username and password required.</p>

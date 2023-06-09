@@ -180,9 +180,4 @@
 		color: var(--error-red);
 		text-align: center;
 	}
-
-	.turnstile {
-		margin-top: 1rem;
-		text-align: center;
-	}
 </style>
