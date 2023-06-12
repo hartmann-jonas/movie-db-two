@@ -40,10 +40,10 @@ model User {
 
   role            Roles   @relation(fields: [roleId], references: [id])
   roleId          Int
-  favorite_movies Movie[] @relation("Favourites")
-  favourite_shows Show[] @relation("Favourites")
-  liked_movies    Movie[] @relation("Likes")
-  liked_shows     Show[] @relation("Likes")
+  favorite_movies Movie[] @relation("MovieFavourites")
+  favourite_shows Show[] @relation("ShowFavourites")
+  liked_movies    Movie[] @relation("MovieLikes")
+  liked_shows     Show[] @relation("ShowLikes")
   movie_comments  MovieComments[]
   show_comments   ShowComments[]
 }
@@ -59,16 +59,16 @@ model Roles {
 
 model Movie {
   id           Int        @id @unique @default(autoincrement())
-  favorited_by User[]     @relation("Favourites")
-  likes        User[]     @relation("Likes")
+  favorited_by User[]     @relation("MovieFavourites")
+  likes        User[]     @relation("MovieLikes")
   genres     Genres[]
   comments  MovieComments[]
 }
 
 model Show {
   id            Int      @id @unique @default(autoincrement())
-  favourited_by User[]   @relation("Favourites")
-  likes         User[]   @relation("Likes")
+  favourited_by User[]   @relation("ShowFavourites")
+  likes         User[]   @relation("ShowLikes")
   comments      ShowComments[]
 }
 
