@@ -6,28 +6,28 @@ import { error, fail } from '@sveltejs/kit'
 import 'dotenv/config'
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-    const { id } = params
-    const movieId = Number(id)
+    const showId = Number(params.showId)
     const apiKey = process.env.TMDB_API_KEY
     // fetch both requests simultaneously
-    const [movieDetailResponse, movieAvailabilityResponse] = await Promise.all([
+    const [showDetailResponse, showAvailabilityResponse] = await Promise.all([
         fetch(
-            `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&append_to_response=videos,keywords,recommendations`
+            `https://api.themoviedb.org/3/tv/${showId}?api_key=${apiKey}&append_to_response=videos,keywords,recommendations`
         ),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${apiKey}`)
+        fetch(`https://api.themoviedb.org/3/tv/${showId}/watch/providers?api_key=${apiKey}`)
     ]);
-    const movieDetail = await movieDetailResponse.json()
-    const movieAvailability = await movieAvailabilityResponse.json()
-    if (movieDetailResponse.ok && movieAvailabilityResponse.ok) {
+    const showDetail = await showDetailResponse.json()
+    const showAvailability = await showAvailabilityResponse.json()
+    console.log(showDetail)
+    if (showDetailResponse.ok && showAvailabilityResponse.ok) {
         return {
             props: {
-                movieDetail,
-                movieAvailability,
+                showDetail,
+                showAvailability,
                 streamed: {
                     userInteractions: new Promise(async (fulfil) => {
                         let favorited = false
                         let liked = false
-                        // if the user is logged in check if he has liked or saved the movie
+                        // if the user is logged in check if he has liked or saved the show
                         if (locals.user) {
                             const userId = locals.user.id;
                             const userResult = await database.user.findUnique({
@@ -35,21 +35,21 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                                     id: userId
                                 },
                                 select: {
-                                    favorite_movies: {
+                                    favourite_shows: {
                                         where: {
-                                            id: movieId
+                                            id: showId
                                         }
                                     },
-                                    liked_movies: {
+                                    liked_shows: {
                                         where: {
-                                            id: movieId
+                                            id: showId
                                         }
                                     }
                                 }
                             })
                             if (userResult) {
-                                favorited = userResult.favorite_movies.length > 0;
-                                liked = userResult.liked_movies.length > 0;
+                                favorited = userResult.favourite_shows.length > 0;
+                                liked = userResult.liked_shows.length > 0;
                                 console.log('User interactions load finished.')
                                 fulfil({
                                     liked: liked,
@@ -65,10 +65,10 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                     }),
                     likes: new Promise(async (fulfil) => {
                         let likes
-                        // if movie exists try to find the likes of the movie in the database
-                        const likesResult = await database.movie.findFirst({
+                        // if show exists try to find the likes of the show in the database
+                        const likesResult = await database.show.findFirst({
                             where: {
-                                id: movieId
+                                id: showId
                             },
                             include: {
                                 _count: {
@@ -84,17 +84,17 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                             console.log('Likes load finished.')
                             fulfil(likes)
                         } else if (likesResult == null) {
-                            console.log('Movie has no likes');
+                            console.log('show has no likes');
                             fulfil(0)
                         }
                     }),
-                    // TODO: make one big movieData to get likes and comments from db at the same time
+                    // TODO: make one big showData to get likes and comments from db at the same time
                     comments: new Promise(async (fulfil) => {
                         let comments = []
-                        // search comments for movie in db
-                        const commentsResult = await database.movie.findFirst({
+                        // search comments for show in db
+                        const commentsResult = await database.show.findFirst({
                             where: {
-                                id: movieId
+                                id: showId
                             },
                             select: {
                                 comments: {
@@ -111,7 +111,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
                             comments = comments.reverse()
                             fulfil(comments)
                         } else if (commentsResult == null) {
-                            console.log('Movie has no comments');
+                            console.log('show has no comments');
                             fulfil(0)
                         }
                     })
@@ -123,13 +123,13 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 }
 
 export const actions: Actions = {
-    //Store movie as favourite
-    saveMovie: async ({ locals, params }) => {
+    //Store show as favourite
+    saveShow: async ({ locals, params }) => {
         if (locals.user.id) {
-            const movieId = Number(params.id)
+            const showId = Number(params.showId)
             const userId = locals.user.id
-            console.log('Save the movie:')
-            console.log('MovieId: ' + movieId)
+            console.log('Save the show:')
+            console.log('showId: ' + showId)
             console.log('User:    ' + userId)
             try {
                 await database.user.update({
@@ -137,14 +137,14 @@ export const actions: Actions = {
                         id: userId
                     },
                     data: {
-                        favorite_movies: {
-                            // relate movie to user, if movie doesnt exist reate and relate it
+                        favourite_shows: {
+                            // relate show to user, if show doesnt exist reate and relate it
                             connectOrCreate: {
                                 where: {
-                                    id: movieId
+                                    id: showId
                                 },
                                 create: {
-                                    id: movieId
+                                    id: showId
                                 }
                             }
                         }
@@ -152,9 +152,9 @@ export const actions: Actions = {
                 })
                 // fetch new amount of likes
                 let likes
-                const likesResult = await database.movie.findFirst({
+                const likesResult = await database.show.findFirst({
                     where: {
-                        id: movieId
+                        id: showId
                     },
                     include: {
                         likes: true
@@ -169,32 +169,32 @@ export const actions: Actions = {
                         }
                     }
                 } else {
-                    console.log('Movie has no likes')
+                    console.log('show has no likes')
                 }
             } catch (e) {
                 console.log(e)
-                return fail(400, { error: 'saving movie failed' })
+                return fail(400, { error: 'saving show failed' })
             }
         } else {
             throw error(400, 'no user id found')
         }
     },
 
-    // Remove movie from favourites
-    unsaveMovie: async ({ locals, params }) => {
+    // Remove show from favourites
+    unsaveShow: async ({ locals, params }) => {
         if (locals.user.id) {
-            const movieId = Number(params.id)
+            const showId = Number(params.showId)
             const userId = locals.user.id
-            console.log('Unsave the movie:')
-            console.log('MovieId: ' + movieId)
+            console.log('Unsave the show:')
+            console.log('showId: ' + showId)
             console.log('User:    ' + userId)
             try {
-                await database.movie.update({
+                await database.show.update({
                     where: {
-                        id: movieId
+                        id: showId
                     },
                     data: {
-                        favorited_by: {
+                        favourited_by: {
                             disconnect: {
                                 id: userId
                             }
@@ -203,9 +203,9 @@ export const actions: Actions = {
                 })
                 // fetch new amount of likes
                 let likes
-                const likesResult = await database.movie.findFirst({
+                const likesResult = await database.show.findFirst({
                     where: {
-                        id: movieId
+                        id: showId
                     },
                     include: {
                         likes: true
@@ -220,46 +220,48 @@ export const actions: Actions = {
                         }
                     }
                 } else {
-                    console.log('Movie has no likes')
+                    console.log('show has no likes')
                 }
             } catch (e) {
                 console.log(e);
-                return fail(400, { error: 'unsaving the movie failed' })
+                return fail(400, { error: 'unsaving the show failed' })
             }
         } else {
             throw error(400, 'no user id found')
         }
     },
 
-    // add movie to liked movies of given user
-    likeMovie: async ({ locals, params }) => {
-        console.log('LIKING MOVIE')
+    // add show to liked shows of given user
+    likeShow: async ({ locals, params }) => {
+        console.log('LIKING SHOW')
         if (locals.user.id) {
-            const movieId = Number(params.id)
+            const showId = Number(params.showId)
             const userId = locals.user.id
             console.log(locals)
-            let movie = undefined
+            let show = undefined
             let genres = undefined
             const response = await fetch(
-                `https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.TMDB_API_KEY}`
+                `https://api.themoviedb.org/3/tv/${showId}?api_key=${process.env.TMDB_API_KEY}`
             );
+            console.log(response)
             if (response.ok) {
-                movie = await response.json()
-                genres = await movie.genres
+                show = await response.json()
+                console.log(show)
+                genres = await show.genres
             }
-            console.log('Movie ID:  ' + movieId)
+            console.log('showId:  ' + showId)
             console.log('User:  ' + userId)
-            // link all the genres to the movie
+            // link all the genres to the show
             const start = Date.now()
             for await (const genre of genres) {
                 console.log('Genre: ' + genre.name)
                 try {
-                    await database.movie.upsert({
+                    await database.show.upsert({
                         where: {
-                            id: movieId
+                            id: showId
                         },
                         update: {
-                            genres: {
+                            /* genres: {
                                 connectOrCreate: {
                                     where: {
                                         id: genre.id
@@ -269,7 +271,7 @@ export const actions: Actions = {
                                         genre: genre.name
                                     }
                                 }
-                            },
+                            }, */
                             likes: {
                                 connect: {
                                     id: userId
@@ -277,8 +279,8 @@ export const actions: Actions = {
                             }
                         },
                         create: {
-                            id: movieId,
-                            genres: {
+                            id: showId,
+                            /* genres: {
                                 connectOrCreate: {
                                     where: {
                                         id: genre.id
@@ -288,7 +290,7 @@ export const actions: Actions = {
                                         genre: genre.name
                                     }
                                 }
-                            },
+                            }, */
                             likes: {
                                 connect: {
                                     id: userId
@@ -308,17 +310,17 @@ export const actions: Actions = {
         }
     },
 
-    // remove user from liked of given movie
-    unlikeMovie: async ({ locals, params }) => {
+    // remove user from liked of given show
+    unlikeShow: async ({ locals, params }) => {
         if (locals.user.id) {
-            const movieId = Number(params.id)
+            const showId = Number(params.showId)
             const userId = locals.user.id
-            console.log('Movie ID:  ' + movieId)
+            console.log('Show ID:  ' + showId)
             console.log('User:  ' + userId)
             try {
-                await database.movie.update({
+                await database.show.update({
                     where: {
-                        id: movieId
+                        id: showId
                     },
                     data: {
                         likes: {
@@ -330,7 +332,7 @@ export const actions: Actions = {
                 })
             } catch (e) {
                 console.log(e)
-                return fail(400, { error: 'liking the movie failed' })
+                return fail(400, { error: 'liking the show failed' })
             }
         } else {
             throw error(400, 'no user id found')
@@ -346,13 +348,13 @@ export const actions: Actions = {
                 console.log('missing comment')
                 return fail(400, { error: 'missing comment' })
             } else {
-                const movieId = Number(params.id)
+                const showId = Number(params.showId)
                 const userId = locals.user.id
-                console.log('Movie ID:  ' + movieId)
+                console.log('Show ID:  ' + showId)
                 console.log('User:  ' + userId)
                 console.log('Comment: ' + comment)
                 try {
-                    await database.movieComments.create({
+                    await database.showComments.create({
                         data: {
                             comment: comment,
                             user: {
@@ -360,13 +362,13 @@ export const actions: Actions = {
                                     id: userId
                                 }
                             },
-                            movie: {
+                            show: {
                                 connectOrCreate: {
                                     where: {
-                                        id: movieId
+                                        id: showId
                                     },
                                     create: {
-                                        id: movieId
+                                        id: showId
                                     }
                                 }
                             },
