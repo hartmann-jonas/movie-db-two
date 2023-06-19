@@ -4,6 +4,8 @@
 	// Vercel analytics implementation
 	import { dev } from '$app/environment';
   	import { inject } from '@vercel/analytics';
+	import { Icon } from 'svelte-awesome';
+	import githubSquare from 'svelte-awesome/icons/githubSquare'
 
   	inject({ mode: dev ? 'development' : 'production' });
 </script>
@@ -20,8 +22,20 @@
 		<slot />
 	</div>
 	<footer>
-		<p>Go to the <a href="https://project-page-hartmann-jonas.vercel.app/blog" target="_blank">Development blog</a></p>
-		<a href="https://vercel.com" target="_blank"><img class="powered-by-vercel" src="https://images.ctfassets.net/e5382hct74si/78Olo8EZRdUlcDUFQvnzG7/fa4cdb6dc04c40fceac194134788a0e2/1618983297-powered-by-vercel.svg" alt="powered by vercel"></a>
+		<div class="footer-left">
+			<p>Made possible by TheMovieDB API and JustWatch</p>
+		</div>
+		<div class="footer-center">
+			<p>Go to the <a href="https://project-page-hartmann-jonas.vercel.app/blog" target="_blank">Development blog</a></p>
+			<a href="https://vercel.com" target="_blank"><img class="powered-by-vercel" src="https://images.ctfassets.net/e5382hct74si/78Olo8EZRdUlcDUFQvnzG7/fa4cdb6dc04c40fceac194134788a0e2/1618983297-powered-by-vercel.svg" alt="powered by vercel"></a>
+		</div>
+		<div class="footer-right">
+			<div class="icons">
+				<a href="https://github.com/hartmann-jonas/movie-db-two.git">
+					<Icon data={githubSquare} style="color: var(--foreground)" scale=2.5/>
+				</a>
+			</div>
+		</div>
 	</footer>
 </div>
 
@@ -88,13 +102,35 @@
 
 	footer {
 		flex-shrink: 0;
-		height: 8rem;
+		height: 9rem;
 		width: 100%;
 		text-align: center;
 		padding: 10px;
 		background-color: var(--background);
 		border-top: solid var(--accents-2) 1.5px;
-		padding-top: 1.1rem;
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		font-size: .9rem;
+	}
+
+	.footer-center {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: left;
+		margin-left: 15px;
+		height: 5rem;
+	}
+
+	.footer-left, .footer-center, .footer-right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: left;
+		margin-left: 15px;
+		height: 5rem;
 	}
 
 	p {
