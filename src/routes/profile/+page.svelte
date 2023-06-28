@@ -8,9 +8,6 @@
 
     //Export the data of "Saved Movies"
     export let data: PageServerData;
-
-    console.log(data.props)
-    console.log(data.props?.favouriteMovies.length > 0)
 </script>
 
 <section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>

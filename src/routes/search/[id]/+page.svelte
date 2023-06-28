@@ -30,14 +30,14 @@
 	.title {
 		display: flex;
 		justify-content: space-between;
-		color: black;
+		color: var(--foreground);
 		font-size: 1.1rem;
 		font-weight: bold;
 	}
 
 	.title a, .title a::after {
 		text-decoration: none;
-		color: black;
+		color: var(--foreground);
 	}
 
 	.searched-movies {
