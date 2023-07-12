@@ -8,7 +8,7 @@
 	console.log(data.popularShows)
 </script>
 
-<section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
+<section in:fly|global={{ y: -40, duration: 500, delay: 500 }} out:fly|global={{ y: -40, duration: 500 }}>
 	<SearchMovies />
 	<h3>Trending Movies</h3>
 	<MovieGrid movies={data.popularMovies} />

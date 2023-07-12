@@ -75,8 +75,8 @@
 
 <section
 	class="show-details"
-	in:fly={{ y: 50, duration: 500, delay: 500 }}
-	out:fly={{ y: 50, duration: 400 }}
+	in:fly|global={{ y: 50, duration: 500, delay: 500 }}
+	out:fly|global={{ y: 50, duration: 400 }}
 >
 	<div class="img-container">
 		{#if typeof data.props.showDetail.backdrop_path == 'string'}
