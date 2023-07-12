@@ -15,7 +15,7 @@
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </svelte:head>
 
-<section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
+<section in:fly|global={{ y: -40, duration: 500, delay: 500 }} out:fly|global={{ y: -40, duration: 500 }}>
 	<div class="signin">
 		<div class="head">
 			<h4>Sign In</h4>

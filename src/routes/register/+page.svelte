@@ -10,7 +10,7 @@
   let scale = 3;
 </script>
 
-<section in:fly={{ y: -40, duration: 500, delay: 500 }} out:fly={{ y: -40, duration: 500 }}>
+<section in:fly|global={{ y: -40, duration: 500, delay: 500 }} out:fly|global={{ y: -40, duration: 500 }}>
   <div class="register">
     <div class="head">
       <h4>Sign Up</h4>

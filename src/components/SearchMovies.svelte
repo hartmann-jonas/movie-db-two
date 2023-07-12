@@ -26,7 +26,7 @@
 <form on:submit|preventDefault={submitSearch} class="search">
 	<!--Animation to fly in the lable from the top when nothing is in the input-->
 	{#if !active}
-		<label in:fly={{ y: -10, duration: 500 }} out:fly={{ y: -10, duration: 500 }} for="search_movie"
+		<label in:fly|global={{ y: -10, duration: 500 }} out:fly|global={{ y: -10, duration: 500 }} for="search_movie"
 			>Search Movie</label
 		>
 	{/if}
@@ -40,8 +40,8 @@
 	/>
 	<!--If there is a text in the input -> show the search button-->
 	{#if inputValue}
-		<!--<button in:fly={{ x: 10, duration: 500 }} out:fly={{ x: 0, duration: 500 }}>Search</button>-->
-		<button in:fly={{ x: 0, duration: 500 }} out:fly={{ x: 0, duration: 500 }}>Search</button>
+		<!--<button in:fly|global={{ x: 10, duration: 500 }} out:fly|global={{ x: 0, duration: 500 }}>Search</button>-->
+		<button in:fly|global={{ x: 0, duration: 500 }} out:fly|global={{ x: 0, duration: 500 }}>Search</button>
 	{/if}
 </form>
 
