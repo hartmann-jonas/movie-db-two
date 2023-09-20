@@ -515,8 +515,8 @@
 
 	.unsaved button {
 		display: flex;
-		color: white;
-		background-color: black;
+		color: var(--foreground);
+		background-color:  var(--background);
 		border: solid var(--accents-2) 1px;
 		border-left: none;
 		border-top-right-radius: 50%;
