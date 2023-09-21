@@ -5,30 +5,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Local Postgres dev.db
-//datasource db {
-//  provider = "postgresql"
-//  url = env("DEVELOPMENT_POSTGRES")
-//}
 
-// Vercel PostgreSQL
-//datasource db {
-//  provider = "postgresql"
-//  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-//  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-//}
 
-// Render PostgreSQL
-//datasource db {
-//  provider = "postgresql"
-//  url = env("RENDER_DATABASE_URL")
-//}
+
+
+
+
+
+
+
+
 
 // Neon PostgreSQL
 datasource db {
   provider = "postgresql"
   url  	= env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+
+//  url = env("DEVELOPMENT_POSTGRES")
 }
 
 //Create table User
