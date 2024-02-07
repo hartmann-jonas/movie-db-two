@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({}) => {
     }
 
     return {
-        popularMovies: fetchMovies(),
-        popularShows: fetchShows(),
+        popularMovies: await fetchMovies(),
+        popularShows: await fetchShows(),
     }
 }
